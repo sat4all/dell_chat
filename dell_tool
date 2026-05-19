@@ -768,6 +768,202 @@
     .sa-table th { background: #0a0f1e; color: #fff; }
     .dark .sa-table th { background: var(--navy); }
 
+    /* ─────────────────────────────────────────────
+       CLI HUB STYLES
+    ───────────────────────────────────────────── */
+    /* CLI Category Section */
+    .cli-cat-section {
+      margin-bottom: 28px;
+      animation: fadeIn .3s ease;
+    }
+    .cli-cat-section.collapsed {
+      display: block;
+    }
+    .cli-cat-section.sub-cat {
+      margin-left: 24px;
+      padding-left: 20px;
+      border-left: 2px solid var(--accent-soft);
+      margin-bottom: 20px;
+    }
+
+    /* CLI Category Header */
+    .cli-cat-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 10px;
+    }
+    .cli-cat-section.collapsed .cli-cat-header {
+      display: flex;
+    }
+    .cli-cat-icon { font-size: 16px; }
+    .cli-cat-name {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .cli-cat-count {
+      font-size: 10px;
+      color: var(--text-faint);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+    }
+    .cli-cat-del-btn {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: var(--transition);
+    }
+    .cli-cat-del-btn:hover {
+      color: var(--red);
+      background: var(--red-soft);
+    }
+    .cli-cat-toggle {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: var(--transition);
+    }
+    .cli-cat-toggle:hover {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .cli-cat-toggle i { transition: transform .2s var(--transition); }
+    .cli-cat-section.collapsed .cli-cat-toggle i { transform: rotate(-90deg); }
+    .cli-cat-line {
+      height: 1px;
+      background: linear-gradient(to right, var(--accent-soft), transparent);
+      margin-bottom: 14px;
+    }
+    .cli-cat-section.collapsed .cli-cat-line {
+      display: block;
+    }
+
+    /* CLI Commands Grid */
+    .cli-cmds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .cli-cat-section.collapsed .cli-cmds-grid { display: none !important; }
+
+    /* CLI Command Card */
+    .cli-cmd-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 14px 12px;
+      position: relative;
+      cursor: default;
+      transition: var(--transition);
+      overflow: hidden;
+    }
+    .cli-cmd-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-soft), transparent);
+      opacity: 0;
+      transition: opacity .3s var(--transition);
+      border-radius: inherit;
+    }
+    .cli-cmd-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .cli-cmd-card:hover::before { opacity: 1; }
+    .cli-cmd-card.user-added {
+      border-color: rgba(16, 185, 129, .2);
+    }
+    .cli-cmd-card.hidden { display: none !important; }
+    .cli-cmd-icon {
+      font-size: 17px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .cli-cmd-title {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .cli-cmd-syn {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--green);
+      background: var(--green-soft);
+      border: 1px solid rgba(16, 185, 129, .15);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      word-break: break-all;
+      line-height: 1.5;
+    }
+    .cli-cmd-acts {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity .15s;
+    }
+    .cli-cmd-card:hover .cli-cmd-acts { opacity: 1; }
+    .cli-cmd-act {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      font-size: 11px;
+      transition: var(--transition);
+    }
+    .cli-cmd-act.cp {
+      background: rgba(0, 87, 255, .8);
+      color: #fff;
+    }
+    .cli-cmd-act.cp:hover { background: var(--accent); }
+    .cli-cmd-act.ed {
+      background: rgba(16, 185, 129, .8);
+      color: #fff;
+    }
+    .cli-cmd-act.ed:hover { background: var(--green); }
+    .cli-cmd-act.dl {
+      background: rgba(229, 62, 62, .8);
+      color: #fff;
+    }
+    .cli-cmd-act.dl:hover { background: var(--red); }
+
     /* Print styles */
     @media print {
       .sidebar, .topbar, .toast-container, .modal-overlay { display: none !important; }
@@ -835,14 +1031,41 @@
 
     /* KB section header */
     .kb-section { margin-bottom: 36px; }
+    .kb-section.collapsed {
+      display: block;
+    }
     .kb-section-head {
       display: flex; align-items: center; gap: 10px;
       margin-bottom: 14px;
+      cursor: pointer;
+    }
+    .kb-section.collapsed .kb-section-head {
+      display: flex;
     }
     .kb-section-head h3 { font-size: 14.5px; font-weight: 700; color: var(--text); }
     .kb-section-divider { flex: 1; height: 1px; background: var(--border); }
     .kb-section-count { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
     .kb-section-icon { font-size: 16px; }
+    .kb-section-toggle {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: var(--transition);
+    }
+    .kb-section-toggle:hover {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .kb-section-toggle i { transition: transform .2s var(--transition); }
+    .kb-section.collapsed .kb-section-toggle i { transform: rotate(-90deg); }
 
     /* KB links grid */
     .kb-grid {
@@ -850,6 +1073,7 @@
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 10px;
     }
+    .kb-section.collapsed .kb-grid { display: none !important; }
 
     /* KB link card */
     .kb-link-card {
@@ -1075,6 +1299,10 @@
           <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           KB Resource Hub
           <span style="margin-left:auto; background:var(--accent-soft); color:var(--accent); font-size:10px; font-weight:700; padding:1px 6px; border-radius:100px">26</span>
+        </button>
+        <button class="nav-item" onclick="showPage('cli')">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          CLI Resource Hub
         </button>
       </div>
 
@@ -1648,7 +1876,191 @@
 
       </div>
 
+      <!-- ═══════════════════════════════════════
+           PAGE: CLI RESOURCE HUB
+      ══════════════════════════════════════════ -->
+      <div class="page" id="page-cli">
+        <!-- CLI Toolbar -->
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:18px">
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <select id="cliSearchScope" class="form-control" style="min-width:180px; padding:11px 16px; font-size:14px">
+              <option value="all">All Categories</option>
+            </select>
+          </div>
+          <div style="display:flex; gap:8px; flex-shrink:0">
+            <button class="btn btn-ghost btn-sm" onclick="window.print()" title="Print">🖨️</button>
+            <button class="btn btn-ghost btn-sm" onclick="cliOpenBackup()" title="Backup & Restore">☁️</button>
+            <button class="btn btn-ghost btn-sm" onclick="cliOpenCategories()" title="Manage Categories">📁+</button>
+            <button class="btn btn-primary btn-sm" onclick="cliOpenAdd()" title="Add Command">+</button>
+          </div>
+        </div>
+
+        <!-- CLI Search -->
+        <div class="kb-search-wrap">
+          <span class="kb-search-icon">🔍</span>
+          <input type="search" id="cliSearchInput" placeholder="Search commands… (e.g. logs, LDAP, BBU)" autocomplete="off" spellcheck="false" aria-label="Search CLI commands">
+          <button class="kb-search-clear" id="cliSearchClear" onclick="document.getElementById('cliSearchInput').value=''; cliDoSearch(); document.getElementById('cliSearchInput').focus()" aria-label="Clear search">✕</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="kb-stats" style="margin-bottom:20px">
+          <div class="kb-stat">
+            <div class="kb-stat-label">Total Commands</div>
+            <div class="kb-stat-value" id="cliTotalCmds">0</div>
+            <div class="kb-stat-icon">🔧</div>
+          </div>
+          <div class="kb-stat">
+            <div class="kb-stat-label">Categories</div>
+            <div class="kb-stat-value" id="cliTotalCats">0</div>
+            <div class="kb-stat-icon">📂</div>
+          </div>
+          <div class="kb-stat">
+            <div class="kb-stat-label">Custom</div>
+            <div class="kb-stat-value" id="cliUserCmds">0</div>
+            <div class="kb-stat-icon">✨</div>
+          </div>
+        </div>
+
+        <!-- No results -->
+        <div class="kb-no-results" id="cliNoResults">
+          <div class="kb-no-results-icon">🔎</div>
+          <h3>No matching commands found</h3>
+          <p style="font-size:13px">Try different keywords or change the category scope</p>
+        </div>
+
+        <!-- Categories Container -->
+        <div id="cliCatsContainer"></div>
+      </div>
+
     </main>
+  </div>
+
+  <!-- ─── CLI: ADD COMMAND MODAL ─── -->
+  <div class="modal-overlay" id="cliAddModal" role="dialog" aria-modal="true" aria-labelledby="cliAddModalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2 id="cliAddModalTitle">Add New Command</h2>
+        <button class="modal-close" onclick="cliCloseModal('cliAddModal')" aria-label="Close">✕</button>
+      </div>
+      <form id="cliAddForm" novalidate>
+        <div class="form-group">
+          <label>Description *</label>
+          <input type="text" id="cliAddTitle" class="form-control" placeholder="What does this command do?" required>
+        </div>
+        <div class="form-group">
+          <label>Command Syntax *</label>
+          <input type="text" id="cliAddUrl" class="form-control" style="font-family:var(--mono); font-size:12.5px" placeholder="e.g. svc_diag list --basic" required>
+        </div>
+        <div class="entry-grid" style="gap:12px">
+          <div class="form-group" style="margin:0">
+            <label>Category *</label>
+            <select id="cliAddCat" class="form-control" required><option value="">Select a category…</option></select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Icon</label>
+            <input type="text" id="cliAddIcon" class="form-control" placeholder="🔗" maxlength="2">
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="cliCloseModal('cliAddModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Add Command</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ─── CLI: EDIT COMMAND MODAL ─── -->
+  <div class="modal-overlay" id="cliEditModal" role="dialog" aria-modal="true" aria-labelledby="cliEditModalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2 id="cliEditModalTitle">Edit Command</h2>
+        <button class="modal-close" onclick="cliCloseModal('cliEditModal')" aria-label="Close">✕</button>
+      </div>
+      <form id="cliEditForm" novalidate>
+        <input type="hidden" id="cliEditId">
+        <input type="hidden" id="cliEditIsUser">
+        <input type="hidden" id="cliEditOrigCat">
+        <div class="form-group">
+          <label>Description *</label>
+          <input type="text" id="cliEditTitle" class="form-control" placeholder="What does this command do?" required>
+        </div>
+        <div class="form-group">
+          <label>Command Syntax *</label>
+          <input type="text" id="cliEditUrl" class="form-control" style="font-family:var(--mono); font-size:12.5px" placeholder="e.g. svc_diag list --basic" required>
+        </div>
+        <div class="entry-grid" style="gap:12px">
+          <div class="form-group" style="margin:0">
+            <label>Category *</label>
+            <select id="cliEditCat" class="form-control" required><option value="">Select a category…</option></select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Icon</label>
+            <input type="text" id="cliEditIcon" class="form-control" placeholder="🔗" maxlength="2">
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="cliCloseModal('cliEditModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ─── CLI: MANAGE CATEGORIES MODAL ─── -->
+  <div class="modal-overlay" id="cliCatModal" role="dialog" aria-modal="true" aria-labelledby="cliCatModalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2 id="cliCatModalTitle">Manage Categories</h2>
+        <button class="modal-close" onclick="cliCloseModal('cliCatModal')" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="kb-cat-list" id="cliCatList"></div>
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); margin-bottom:12px; margin-top:16px">Add New Category</div>
+        <div class="entry-grid" style="gap:12px">
+          <div class="form-group" style="margin:0">
+            <label>Name *</label>
+            <input type="text" id="cliCatName" class="form-control" placeholder="Category name">
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Icon</label>
+            <input type="text" id="cliCatIcon" class="form-control" placeholder="📁" maxlength="2">
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label>Parent Category</label>
+          <select id="cliCatParent" class="form-control"><option value="">None (top-level)</option></select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="cliCloseModal('cliCatModal')">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="cliAddCategory()">Add Category</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CLI: BACKUP MODAL ─── -->
+  <div class="modal-overlay" id="cliBackupModal" role="dialog" aria-modal="true" aria-labelledby="cliBackupModalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2 id="cliBackupModalTitle">Backup & Restore</h2>
+        <button class="modal-close" onclick="cliCloseModal('cliBackupModal')" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="kb-backup-box">
+          <h4>Export Data</h4>
+          <p>Download all your custom commands and categories as a JSON backup file.</p>
+          <button class="btn btn-primary btn-sm btn-block" onclick="cliExport()">⬇️ Export Backup</button>
+        </div>
+        <div class="kb-backup-box">
+          <h4>Import Data</h4>
+          <p>Restore from a previous backup. Choose to replace or merge with existing data.</p>
+          <button class="btn btn-ghost btn-sm btn-block" onclick="document.getElementById('cliImportFile').click()">⬆️ Import Backup</button>
+          <input type="file" id="cliImportFile" accept=".json" style="display:none" onchange="cliImport(event)">
+        </div>
+        <div class="divider"></div>
+        <button class="btn btn-ghost btn-sm btn-block" onclick="window.print()">🖨️ Print All Commands</button>
+      </div>
+    </div>
   </div>
 
   <!-- ─── KB: ADD LINK MODAL ─── -->
@@ -1790,6 +2202,7 @@
     clock:    { title: 'World Clock',       sub: 'Time zone conversion tool' },
     postcode: { title: 'Post Codes',        sub: 'EMEA service coverage reference' },
     kb:       { title: 'KB Resource Hub',      sub: 'PowerStore knowledge base & documentation links' },
+    cli:      { title: 'CLI Resource Hub',  sub: 'PowerStore CLI command reference' },
     links:    { title: 'Quick Links',       sub: 'Fast access to internal resources' },
   };
 
@@ -2711,6 +3124,7 @@
       <h3>${kbSanitize(cat.name)}</h3>
       <div class="kb-section-divider"></div>
       <span class="kb-section-count" id="kbcnt-${cat.id}">${links.length} link${links.length !== 1 ? 's' : ''}</span>
+      <button class="kb-section-toggle" data-cat="${cat.id}"><i>▼</i></button>
     `;
     sec.appendChild(head);
 
@@ -2719,6 +3133,22 @@
     grid.id = 'kbgrid-' + cat.id;
     links.forEach(l => grid.appendChild(kbMakeCard(l, !l.id.startsWith('dl_'))));
     sec.appendChild(grid);
+
+    // Check collapse state from localStorage
+    const kbCol = JSON.parse(localStorage.getItem('kb_collapsed') || '{}');
+    if (kbCol[cat.id]) {
+      sec.classList.add('collapsed');
+    }
+
+    // Toggle collapse on button click
+    const toggleBtn = head.querySelector('.kb-section-toggle');
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sec.classList.toggle('collapsed');
+      const current = JSON.parse(localStorage.getItem('kb_collapsed') || '{}');
+      current[cat.id] = sec.classList.contains('collapsed');
+      localStorage.setItem('kb_collapsed', JSON.stringify(current));
+    });
 
     return sec;
   }
@@ -3079,6 +3509,777 @@
     kbRender();
     document.getElementById('kbStatDate').textContent = new Date().toLocaleDateString('en-IE',{day:'numeric',month:'short'});
   }
+
+  // ─────────────────────────────────────────────
+  // CLI RESOURCE HUB
+  // ─────────────────────────────────────────────
+
+  // Default categories and commands
+  const CLI_DEFAULT_CATS = [
+    {id:'ps_scripts_stg_toolset',name:'PS Scripts STG Toolset',icon:'🔧',isDefault:true,commands:[
+      {id:'cmd_1',title:'psGetOSVer — Displays PowerStore OS version. Confirms both nodes run same version.',url:'psGetOSVer',icon:'💻'},
+      {id:'cmd_2',title:'psAlerts — Logged appliance/cluster alerts. Use -a for ACTIVE alerts only.',url:'psAlerts',icon:'⚠️'},
+      {id:'cmd_3',title:'psEvents — Logged appliance/cluster events (detailed data collects only).',url:'psEvents',icon:'📋'},
+      {id:'cmd_4',title:'psHardware — Hardware status, part numbers, serial numbers. Use -a for non-Healthy.',url:'psHardware',icon:'🔩'},
+      {id:'cmd_5',title:'psFEPorts — Front-end port details for FC and Ethernet.',url:'psFEPorts',icon:'🔌'},
+      {id:'cmd_6',title:'psLLDP — Switch LLDP details for each PowerStore ethernet port. Use -a for more.',url:'psLLDP',icon:'🌐'},
+      {id:'cmd_7',title:'psNetworkConfig — Appliance/cluster IP network configuration details.',url:'psNetworkConfig',icon:'📡'},
+      {id:'cmd_8',title:'psDriveWear — Displays drive wear details.',url:'psDriveWear',icon:'💾'},
+      {id:'cmd_9',title:'psHostConfig — Host initiator configuration. Use -c for connections by initiator.',url:'psHostConfig',icon:'🖥️'},
+      {id:'cmd_10',title:'psBlockVolumeConfig — Block volume configuration details.',url:'psBlockVolumeConfig',icon:'📦'},
+      {id:'cmd_11',title:'psvVolVolumeConfig — vVol volume configuration details.',url:'psvVolVolumeConfig',icon:'🗃️'},
+      {id:'cmd_12',title:'psNasServerConfig — NAS server configuration details.',url:'psNasServerConfig',icon:'🖥️'},
+      {id:'cmd_13',title:'psNasFileSystemConfig — NAS file system configuration details.',url:'psNasFileSystemConfig',icon:'📁'},
+      {id:'cmd_14',title:'psNasSMBConfig — NAS SMB configuration details.',url:'psNasSMBConfig',icon:'🔐'},
+      {id:'cmd_15',title:'psUsableSpace — Total and used user space of the appliance.',url:'psUsableSpace',icon:'📊'},
+      {id:'cmd_16',title:'psSpaceUtilization — Hourly space utilization with data reduction and efficiency ratios.',url:'psSpaceUtilization',icon:'📈'},
+      {id:'cmd_17',title:'psJournalTime — Time span contained within the journal of the current DC.',url:'psJournalTime',icon:'⏱️'},
+      {id:'cmd_18',title:'psMemory — Current and low available memory for each node in the current DC.',url:'psMemory',icon:'🧠'},
+      {id:'cmd_19',title:'DRR-DC-Review-tool — Check data reduction rate details and space statistics.',url:'DRR-DC-Review-tool',icon:'📉'},
+      {id:'cmd_20',title:'findPowerStore — Find PowerStore logs based on Type, Mode, and Version.',url:'findPowerStore',icon:'🔍'},
+      {id:'cmd_21',title:'fixSSH_Known_Host — Fix SSL errors when SSHing to another host from STGToolset.',url:'fixSSH_Known_Host',icon:'🔒'},
+      {id:'cmd_22',title:'powerstore_triage_full — [NOT RECOMMENDED] Full Triage script; creates large files.',url:'powerstore_triage_full',icon:'⚠️'},
+      {id:'cmd_23',title:'ps500T4PortCardCheck — 4-Port card information for 500T systems.',url:'ps500T4PortCardCheck',icon:'🔧'},
+      {id:'cmd_24',title:'psBBUAnalyze — Battery backup (BBU) information.',url:'psBBUAnalyze',icon:'🔋'},
+      {id:'cmd_25',title:'psCheckDrivePaths — Verify backend drive paths.',url:'psCheckDrivePaths',icon:'🛣️'},
+      {id:'cmd_26',title:'psDriveDBCheck — Checks for stale driveDB issues — LKB 000318318.',url:'psDriveDBCheck',icon:'🔍'},
+      {id:'cmd_27',title:'psIPmappingPhysport — Maps IP address to physical port.',url:'psIPmappingPhysport',icon:'🗺️'},
+      {id:'cmd_28',title:'psMapRecovery — Data integrity issue checks — LKB 000197298.',url:'psMapRecovery',icon:'🛡️'},
+      {id:'cmd_29',title:'psMdot2Check — M.2 health status, 2-strike history, CAL matches, recovery KB pointer.',url:'psMdot2Check',icon:'💾'},
+      {id:'cmd_30',title:'psNDUStatus — NDU status and operations information.',url:'psNDUStatus',icon:'📊'},
+      {id:'cmd_31',title:'psPCAChecker — Runs psDriveDBCheck, psBBUAnalyze, ps500T4PortCardCheck, psMdot2PFR together.',url:'psPCAChecker',icon:'🔬'},
+      {id:'cmd_32',title:'psSaveDCforFA — Preserve data collects for WWFA. (DO NOT USE UNLESS REQUIRED)',url:'psSaveDCforFA',icon:'💾'},
+      {id:'cmd_33',title:'pst-family — PowerStore Volume Family information.',url:'pst-family',icon:'👨‍👩‍👧‍👦'},
+      {id:'cmd_34',title:'pst-fc — FC mapping between host ports and target ports.',url:'pst-fc',icon:'🔌'},
+      {id:'cmd_35',title:'pst-FEports — Front-end port details.',url:'pst-FEports',icon:'🔌'},
+      {id:'cmd_36',title:'pst-hostvolmap — Mapping between hosts and volumes.',url:'pst-hostvolmap',icon:'🗺️'},
+      {id:'cmd_37',title:'pst-iscsi — iSCSI mapping between host ports and target ports.',url:'pst-iscsi',icon:'🌐'},
+      {id:'cmd_38',title:'pst-nasfsconfig — SDNAS FS summary information.',url:'pst-nasfsconfig',icon:'📁'},
+      {id:'cmd_39',title:'pst-nasipconfig — SDNAS IP addresses summary.',url:'pst-nasipconfig',icon:'📍'},
+      {id:'cmd_40',title:'pst-nasnfsexports — SDNAS NFS Exports.',url:'pst-nasnfsexports',icon:'📤'},
+      {id:'cmd_41',title:'pst-nassmbshares — SDNAS SMB shares information.',url:'pst-nassmbshares',icon:'📂'},
+      {id:'cmd_42',title:'pst-nassnapshots — NAS snapshots with associated FS and NAS server.',url:'pst-nassnapshots',icon:'📸'},
+      {id:'cmd_43',title:'pst-nassummary — SDNAS summary information.',url:'pst-nassummary',icon:'📋'},
+      {id:'cmd_44',title:'pst-portmapping — PWST IP addresses to physical ports mapping.',url:'pst-portmapping',icon:'🗺️'},
+      {id:'cmd_45',title:'pst-replicationconfig — Replication summary.',url:'pst-replicationconfig',icon:'🔄'},
+      {id:'cmd_46',title:'psTriage — Runs PowerStore Triage report and health check.',url:'psTriage',icon:'🏥'},
+      {id:'cmd_47',title:'pst-snap — List snapshots with IDs for secure snapshot deletion.',url:'pst-snap',icon:'📸'},
+      {id:'cmd_48',title:'pst-volumeconfig — Summary of volumes.',url:'pst-volumeconfig',icon:'📦'},
+      {id:'cmd_50',title:'psVMBP — Checks ESXi host logs against PowerStore best practices.',url:'psVMBP',icon:'✅'},
+      {id:'cmd_51',title:'ps-getfast-oldDC',url:'ps-getfast-oldDC',icon:'⚡'},
+      {id:'cmd_52',title:'ps-journal-resourcebalancer',url:'ps-journal-resourcebalancer',icon:'⚖️'},
+      {id:'cmd_53',title:'ps-list-Model',url:'ps-list-Model',icon:'🏷️'},
+      {id:'cmd_54',title:'ps-NASxtract',url:'ps-NASxtract',icon:'📤'},
+      {id:'cmd_55',title:'ps-getlastDC',url:'ps-getlastDC',icon:'📅'},
+      {id:'cmd_56',title:'ps-journal-rest-calls',url:'ps-journal-rest-calls',icon:'📞'},
+      {id:'cmd_57',title:'ps-list-nasvolumes',url:'ps-list-nasvolumes',icon:'📚'},
+      {id:'cmd_58',title:'ps-journal-scsi3',url:'ps-journal-scsi3',icon:'💿'},
+      {id:'cmd_59',title:'ps-list-nduinfo',url:'ps-list-nduinfo',icon:'📊'},
+      {id:'cmd_60',title:'ps-journal-slowio',url:'ps-journal-slowio',icon:'🐢'},
+      {id:'cmd_61',title:'ps-list-Network',url:'ps-list-Network',icon:'🌐'},
+      {id:'cmd_62',title:'psnt',url:'psnt',icon:'🔧'},
+      {id:'cmd_63',title:'ps-journal-ooms',url:'ps-journal-ooms',icon:'💾'},
+      {id:'cmd_64',title:'ps-list-Nodes',url:'ps-list-Nodes',icon:'🖥️'},
+      {id:'cmd_65',title:'ps-null-vol-uuid',url:'ps-null-vol-uuid',icon:'❓'},
+      {id:'cmd_66',title:'ps-gettodaysDC',url:'ps-gettodaysDC',icon:'📆'},
+      {id:'cmd_67',title:'ps-list-NTP',url:'ps-list-NTP',icon:'⏰'},
+      {id:'cmd_68',title:'psPerformanceScan',url:'psPerformanceScan',icon:'📈'},
+      {id:'cmd_69',title:'ps-list-Appliance',url:'ps-list-Appliance',icon:'🖥️'},
+      {id:'cmd_70',title:'ps-list-Packages',url:'ps-list-Packages',icon:'📦'},
+      {id:'cmd_71',title:'pspsnt',url:'pspsnt',icon:'🔧'},
+      {id:'cmd_72',title:'ps-hw-err-counters',url:'ps-hw-err-counters',icon:'🔢'},
+      {id:'cmd_73',title:'ps-list-AuditEvents',url:'ps-list-AuditEvents',icon:'📋'},
+      {id:'cmd_74',title:'ps-list-repl',url:'ps-list-repl',icon:'🔄'},
+      {id:'cmd_75',title:'psRebootAnalyzer',url:'psRebootAnalyzer',icon:'🔄'},
+      {id:'cmd_76',title:'ps-journal-bbu',url:'ps-journal-bbu',icon:'🔋'},
+      {id:'cmd_77',title:'ps-list-bbu',url:'ps-list-bbu',icon:'🔋'},
+      {id:'cmd_78',title:'ps-list-shc',url:'ps-list-shc',icon:'🔗'},
+      {id:'cmd_79',title:'ps-refresh-unpack',url:'ps-refresh-unpack',icon:'🔄'},
+      {id:'cmd_80',title:'ps-journal-ciq-score',url:'ps-journal-ciq-score',icon:'📊'},
+      {id:'cmd_81',title:'ps-list-Cluster',url:'ps-list-Cluster',icon:'🔗'},
+      {id:'cmd_82',title:'ps-list-SRS',url:'ps-list-SRS',icon:'💾'},
+      {id:'cmd_83',title:'ps-rsync-jira-path',url:'ps-rsync-jira-path',icon:'📁'},
+      {id:'cmd_84',title:'ps-journal-cp-certs',url:'ps-journal-cp-certs',icon:'🔐'},
+      {id:'cmd_85',title:'ps-list-containers',url:'ps-list-containers',icon:'📦'},
+      {id:'cmd_86',title:'ps-list-ssdinfo',url:'ps-list-ssdinfo',icon:'💾'},
+      {id:'cmd_87',title:'psReplicationTriage',url:'psReplicationTriage',icon:'🔄'},
+      {id:'cmd_88',title:'ps-journal-dfu',url:'ps-journal-dfu',icon:'🔄'},
+      {id:'cmd_89',title:'ps-list-DCs',url:'ps-list-DCs',icon:'📊'},
+      {id:'cmd_90',title:'ps-list-StorageConnection',url:'ps-list-StorageConnection',icon:'🔌'},
+      {id:'cmd_91',title:'ps-resources-util',url:'ps-resources-util',icon:'📊'},
+      {id:'cmd_92',title:'ps-journal-hw',url:'ps-journal-hw',icon:'🔩'},
+      {id:'cmd_93',title:'ps-list-DNS',url:'ps-list-DNS',icon:'🌐'},
+      {id:'cmd_94',title:'ps-listSupportAssist',url:'ps-listSupportAssist',icon:'🛠️'},
+      {id:'cmd_95',title:'ps-SDNAS-extract',url:'ps-SDNAS-extract',icon:'📤'},
+      {id:'cmd_96',title:'ps-journal-metadata',url:'ps-journal-metadata',icon:'📋'},
+      {id:'cmd_97',title:'ps-list-Events',url:'ps-list-Events',icon:'📋'},
+      {id:'cmd_98',title:'ps-list-Upgrades',url:'ps-list-Upgrades',icon:'⬆️'},
+      {id:'cmd_99',title:'psSignatureEngine',url:'psSignatureEngine',icon:'✍️'},
+      {id:'cmd_100',title:'ps-journal-ndu',url:'ps-journal-ndu',icon:'📊'},
+      {id:'cmd_101',title:'ps-list-FailedDCcommands',url:'ps-list-FailedDCcommands',icon:'❌'},
+      {id:'cmd_102',title:'ps-slab-util',url:'ps-slab-util',icon:'📊'},
+      {id:'cmd_103',title:'ps-journal-onv',url:'ps-journal-onv',icon:'🔌'},
+      {id:'cmd_104',title:'ps-list-HostConnection',url:'ps-list-HostConnection',icon:'🔗'},
+      {id:'cmd_105',title:'pssr',url:'pssr',icon:'🔄'},
+      {id:'cmd_106',title:'ps-journal-panics',url:'ps-journal-panics',icon:'🚨'},
+      {id:'cmd_107',title:'ps-list-HostGroups',url:'ps-list-HostGroups',icon:'👥'},
+      {id:'cmd_108',title:'ps-journal-pdoc',url:'ps-journal-pdoc',icon:'📄'},
+      {id:'cmd_109',title:'ps-list-hw',url:'ps-list-hw',icon:'🔩'},
+      {id:'cmd_110',title:'pstag',url:'pstag',icon:'🏷️'},
+      {id:'cmd_111',title:'ps-journal-puhc',url:'ps-journal-puhc',icon:'🔌'},
+      {id:'cmd_112',title:'ps-list-Initiators',url:'ps-list-Initiators',icon:'🔌'},
+      {id:'cmd_113',title:'ps-mem-profile',url:'ps-mem-profile',icon:'🧠'},
+      {id:'cmd_114',title:'ps-journal-reboots',url:'ps-journal-reboots',icon:'🔄'},
+      {id:'cmd_115',title:'ps-list-journals',url:'ps-list-journals',icon:'📓'},
+      {id:'cmd_116',title:'ps-unpack',url:'ps-unpack',icon:'📦'},
+      {id:'cmd_117',title:'ps-unpack.sh',url:'ps-unpack.sh',icon:'📦'},
+      {id:'cmd_118',title:'psfaddtable',url:'psfaddtable',icon:'📊'},
+      {id:'cmd_119',title:'ps-journal-ports',url:'ps-journal-ports',icon:'🔌'},
+      {id:'cmd_120',title:'pslog',url:'pslog',icon:'📝'},
+      {id:'cmd_121',title:'psfgettable',url:'psfgettable',icon:'📊'},
+      {id:'cmd_122',title:'ps-journal-repl',url:'ps-journal-repl',icon:'🔄'},
+      {id:'cmd_123',title:'ps-list-m2',url:'ps-list-m2',icon:'💾'},
+      {id:'cmd_124',title:'psfstriptable',url:'psfstriptable',icon:'📊'},
+      {id:'cmd_125',title:'psfxtable',url:'psfxtable',icon:'📊'},
+      {id:'cmd_127',title:'psAnalyzeReboot',url:'psAnalyzeReboot',icon:'🔄'},
+      {id:'cmd_128',title:'psAnalyzeReboot.sh',url:'psAnalyzeReboot.sh',icon:'🔄'},
+      {id:'cmd_129',title:'psappl',url:'psappl',icon:'🖥️'},
+      {id:'cmd_130',title:'psappliance',url:'psappliance',icon:'🖥️'},
+      {id:'cmd_131',title:'ps-audit-ldap',url:'ps-audit-ldap',icon:'🔐'},
+      {id:'cmd_132',title:'ps-audit-ldap2',url:'ps-audit-ldap2',icon:'🔐'},
+      {id:'cmd_133',title:'ps-check-gsdips',url:'ps-check-gsdips',icon:'🔍'},
+      {id:'cmd_134',title:'ps-check-space',url:'ps-check-space',icon:'💾'},
+      {id:'cmd_135',title:'pscl',url:'pscl',icon:'🔧'},
+      {id:'cmd_136',title:'psDimms',url:'psDimms',icon:'💾'},
+      {id:'cmd_137',title:'pstree',url:'pstree',icon:'🌳'},
+      {id:'cmd_138',title:'pstree.x11',url:'pstree.x11',icon:'🌳'},
+      {id:'cmd_139',title:'pstscan',url:'pstscan',icon:'🔍'},
+      {id:'cmd_140',title:'pstscan_latest',url:'pstscan_latest',icon:'🔍'},
+      {id:'cmd_141',title:'pst-help',url:'pst-help',icon:'❓'}
+    ]},
+    {id:'svc_commands',name:'SVC Commands',icon:'🧠',isDefault:true,commands:[
+      {id:'svc_1',title:'svc_diag list --basic — Check which node is leader.',url:'svc_diag list --basic',icon:'🔍'},
+      {id:'svc_2',title:'svc_diag list --info',url:'svc_diag list --info',icon:'ℹ️'},
+      {id:'svc_3',title:'svc_diag list --show_drives',url:'svc_diag list --show_drives',icon:'💾'},
+      {id:'svc_4',title:'svc_diag list --nvme_drive',url:'svc_diag list --nvme_drive',icon:'🔌'},
+      {id:'svc_5',title:'svc_diag list --icw_hardware',url:'svc_diag list --icw_hardware',icon:'🔧'},
+      {id:'svc_6',title:'svc_diag list --storage',url:'svc_diag list --storage',icon:'📊'},
+      {id:'svc_7',title:'svc_diag list --alerts',url:'svc_diag list --alerts',icon:'⚠️'},
+      {id:'svc_8',title:'svc_diag list --battery --sub_options summary',url:'svc_diag list --battery --sub_options summary',icon:'🔋'},
+      {id:'svc_9',title:'svc_diag list --hardware --sub_options sel',url:'svc_diag list --hardware --sub_options sel',icon:'📋'},
+      {id:'svc_10',title:'svc_diag list --hardware --sub_options fault_status',url:'svc_diag list --hardware --sub_options fault_status',icon:'❌'},
+      {id:'svc_11',title:'svc_license_status list',url:'svc_license_status list',icon:'📜'},
+      {id:'svc_12',title:'svc_commit_slic status x [0-3] — Check if SLIC activated (run on leader).',url:'svc_commit_slic status x',icon:'✅'},
+      {id:'svc_13',title:'svc_commit_slic activate x',url:'svc_commit_slic activate x',icon:'🚀'},
+      {id:'svc_14',title:'svc_pstcli eth_port show',url:'svc_pstcli eth_port show',icon:'🌐'},
+      {id:'svc_15',title:'svc_networkcheck ethtool ens8f0np0',url:'svc_networkcheck ethtool ens8f0np0',icon:'🔗'},
+      {id:'svc_16',title:'svc_pstcli remote_system show — name, type, state, connection info.',url:'svc_pstcli remote_system show -select name,type,state,data_connection_state,data_connection_type,data_network_latency',icon:'🔌'},
+      {id:'svc_17',title:"svc_drive_stats list --smartData | grep -E 'Drive_|Percentage Used'",url:"svc_drive_stats list --smartData | grep -E 'Drive_|Percentage Used'",icon:'📊'},
+      {id:'svc_18',title:'svc_journalctl -t cyc_puhc -f — Check PUHC.',url:'svc_journalctl -t cyc_puhc -f',icon:'📋'},
+      {id:'svc_19',title:'svc_journalctl -t appliance_hc — Check System Health Check.',url:'svc_journalctl -t appliance_hc',icon:'📋'},
+      {id:'svc_20',title:'svc_health_check run',url:'svc_health_check run',icon:'🏥'},
+      {id:'svc_21',title:'svc_health_check list',url:'svc_health_check list',icon:'📋'},
+      {id:'svc_22',title:'svc_health_check run -rhc active_system_alert_check',url:'svc_health_check run -rhc active_system_alert_check',icon:'⚠️'},
+      {id:'svc_23',title:'svc_health_check run puhc_pre_upgrade_check',url:'svc_health_check run puhc_pre_upgrade_check',icon:'🔍'},
+      {id:'svc_24',title:'svc_health_check run –rhc puhc_pre_upgrade_check',url:'svc_health_check run –rhc puhc_pre_upgrade_check',icon:'🔍'},
+      {id:'svc_25',title:'svc_pstcli software_package show — name, type, state, installed_date.',url:'svc_pstcli software_package show -select name,software_package_type,software_package_state,installed_date -sort installed_date',icon:'📦'},
+      {id:'svc_26',title:'svc_node shutdown local — Shutdown node.',url:'svc_node shutdown local',icon:'⏻'},
+      {id:'svc_27',title:'svc_node shutdown peer',url:'svc_node shutdown peer',icon:'⏻'},
+      {id:'svc_28',title:'svc_node power_on — Power on peer node.',url:'svc_node power_on',icon:'🔌'},
+      {id:'svc_29',title:'svc_node reboot peer — Restart peer node.',url:'svc_node reboot peer',icon:'🔄'},
+      {id:'svc_30',title:'svc_node reboot local -f — Force restart the node.',url:'svc_node reboot local -f',icon:'🔄'},
+      {id:'svc_31',title:'svc_journalctl -t panic_log',url:'svc_journalctl -t panic_log',icon:'📋'},
+      {id:'svc_32',title:'svc_dc list_dumps — List dump files (live system).',url:'svc_dc list_dumps',icon:'📁'},
+      {id:'svc_33',title:'svc_dc list <id>',url:'svc_dc list <id>',icon:'📋'},
+      {id:'svc_34',title:'svc_dc run',url:'svc_dc run',icon:'▶️'},
+      {id:'svc_35',title:'svc_dc upload <id> — Upload logs to CloudIQ.',url:'svc_dc upload xxxxxxxxxxxxx',icon:'☁️'},
+      {id:'svc_36',title:'svc_container_mgmt restart CP — Restart control path.',url:'svc_container_mgmt restart CP',icon:'🔄'},
+      {id:'svc_37',title:'svc_networkcheck tracert 10.1.147.119',url:'svc_networkcheck tracert 10.1.147.119',icon:'🌐'},
+      {id:'svc_38',title:'svc_ssh_peer',url:'svc_ssh_peer',icon:'🔗'},
+      {id:'svc_39',title:'svc_dc run -a A1,A2 — Run diags on both appliances.',url:'svc_dc run -a A1,A2',icon:'🔬'},
+      {id:'svc_40',title:'svc_nas ALL -list — Check NAS servers.',url:'svc_nas ALL -list',icon:'📁'},
+      {id:'svc_41',title:'svc_nas ALL -cava — Check antivirus on all NAS servers.',url:'svc_nas ALL -cava',icon:'🛡️'},
+      {id:'svc_42',title:'svc_journalctl -t control-path | grep BlockedThreadChecker | less',url:'svc_journalctl -t control-path |grep BlockedThreadChecker |less',icon:'🔍'},
+      {id:'svc_43',title:'svc_journalctl --response TAG -t control-path | grep BlockedThreadChecker | wc -l',url:'svc_journalctl --response 9GB3KF3_Ps123! -t control-path |grep "BlockedThreadChecker" | wc -l',icon:'🔍'},
+      {id:'svc_44',title:'svc_journalctl --response TAG --since="datetime" -p 3 -g "Error"',url:'svc_journalctl --response 60W4RT3_Ps123! --since="2023-09-22 14:00:00" -p 3 -g "Error"',icon:'❌'},
+      {id:'svc_45',title:'svc_journalctl --response TAG --since="datetime" | grep -i "upgrade"',url:'svc_journalctl --response 36L3KF3_Ps123! --since="2025-03-22 12:51:00"| grep -i "upgrade"',icon:'⬆️'},
+      {id:'svc_46',title:'svc_journalctl --response TAG | grep "Failed"',url:'svc_journalctl --response 60W4RT3_Ps123! | grep "Failed"',icon:'❌'},
+      {id:'svc_47',title:"svc_journalctl -t xtremapp | grep 'Reached mapper snap limit' | tail -10",url:"svc_journalctl -t xtremapp | grep 'Reached mapper snap limit' |tail -10",icon:'📊'},
+      {id:'svc_48',title:'svc_journalctl --response TAG -t control-path | grep "NTB IERR"',url:'svc_journalctl --response D678QT3_Ps123! -t control-path |grep "NTB IERR"',icon:'⚠️'},
+      {id:'svc_49',title:'svc_journalctl --response TAG | grep "NTB IERR"',url:'svc_journalctl --response D678QT3_Ps123! | grep "NTB IERR"',icon:'⚠️'},
+      {id:'svc_50',title:'svc_journalctl -f | grep "NTB IERR"',url:'svc_journalctl -f | grep "NTB IERR"',icon:'⚠️'},
+      {id:'svc_51',title:'svc_node power_off peer — Runs precheck before powering off.',url:'svc_node power_off peer',icon:'⏻'},
+      {id:'svc_52',title:'svc_node power_off peer -f — Force power off.',url:'svc_node power_off peer -f',icon:'⏻'},
+      {id:'svc_53',title:'svc_node power_off local — Power off same node.',url:'svc_node power_off local',icon:'⏻'},
+      {id:'svc_54',title:'svc_remote_support list — Shows if SA is configured.',url:'svc_remote_support list',icon:'📋'},
+      {id:'svc_55',title:'svc_ntp_ctl --set --server NTP_IP — Force NTP sync (code 4.x).',url:'svc_ntp_ctl --set --server "NTP_SERVER_IP"',icon:'🕐'},
+      {id:'svc_56',title:'svc_networkcheck ping NTP_server_ip',url:'svc_networkcheck ping NTP_server_ip',icon:'🔗'},
+      {id:'svc_57',title:'svc_networkcheck tpc <NTP IP> 123 — No root needed.',url:'svc_networkcheck tpc <NTP IP> 123',icon:'🔗'},
+      {id:'svc_58',title:'svc_cluster_management GetClusterStatus — Run on both nodes.',url:'svc_cluster_management GetClusterStatus',icon:'🔗'},
+      {id:'svc_59',title:"svc_journalctl -t xtremapp | grep 'setting NDU result to' — Check fw upgrade.",url:"svc_journalctl -t xtremapp | grep 'setting NDU result to'",icon:'✅'},
+      {id:'svc_60',title:'svc_journalctl --response TAG | grep -i "TRINDU_FLOW" — Check fw upgrade.',url:'svc_journalctl --response TAG_Ps123! | grep -i "TRINDU_FLOW"',icon:'✅'},
+      {id:'svc_61',title:'svc_journalctl -t cyc_upgrade -f',url:'svc_journalctl -t cyc_upgrade -f',icon:'📋'}
+    ]},
+    {id:'root_commands',name:'ROOT Commands',icon:'👁️',isDefault:true,commands:[]},
+    {id:'linux_std',name:'Linux Standard Commands',icon:'🐧',isDefault:true,commands:[]},
+    {id:'journalctl_svc',name:'Journalctl SVC',icon:'🦺',isDefault:true,commands:[]},
+    {id:'journalctl_root',name:'Journalctl ROOT',icon:'🥽',isDefault:true,commands:[]},
+    {id:'logs_syntax',name:'Logs Search Syntax',icon:'🔎',isDefault:true,commands:[]},
+    {id:'pstcli_commands',name:'PSTCLI Commands',icon:'🦙',isDefault:true,commands:[]}
+  ];
+
+  // Storage keys
+  const CLI_KEYS = {
+    u: 'cli_user_commands',
+    c: 'cli_custom_categories',
+    d: 'cli_deleted_commands',
+    col: 'cli_collapsed'
+  };
+
+  const CLI_STORE = {
+    get: k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } },
+    set: (k,v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { toast('Storage error','⚠️'); } }
+  };
+
+  const CLI_GET_COL = () => { try { return JSON.parse(localStorage.getItem(CLI_KEYS.col)) || {}; } catch { return {}; } };
+  const CLI_SET_COL = (id,v) => { const s = CLI_GET_COL(); s[id] = v; localStorage.setItem(CLI_KEYS.col, JSON.stringify(s)); };
+
+  // Helper to sanitize HTML
+  function cliSanitize(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  // Get all categories (default + custom)
+  function cliGetAllCats() {
+    const st = CLI_STORE.get(CLI_KEYS.c);
+    const delIds = st.filter(c => c.isDeleted).map(c => c.id);
+    const cus = st.filter(c => !c.isDeleted);
+    const def = CLI_DEFAULT_CATS.filter(c => !delIds.includes(c.id));
+    const merged = [...def];
+    cus.forEach(c => {
+      const i = merged.findIndex(x => x.id === c.id);
+      i !== -1 ? merged[i] = c : merged.push(c);
+    });
+    return merged;
+  }
+
+  // Update stats
+  function cliUpdateStats() {
+    const uc = CLI_STORE.get(CLI_KEYS.u);
+    const del = CLI_STORE.get(CLI_KEYS.d);
+    let tot = uc.length;
+    CLI_DEFAULT_CATS.forEach(c => {
+      (c.commands || []).forEach(cmd => {
+        if (!del.includes(cmd.id) && !uc.some(u => u.id === cmd.id)) tot++;
+      });
+    });
+    document.getElementById('cliTotalCmds').textContent = tot;
+    document.getElementById('cliTotalCats').textContent = cliGetAllCats().length;
+    document.getElementById('cliUserCmds').textContent = uc.length;
+  }
+
+  // Build command card
+  function cliBuildCard(cmd, isUser, catId) {
+    const card = document.createElement('div');
+    card.className = 'cli-cmd-card' + (isUser ? ' user-added' : '');
+    card.dataset.id = cmd.id;
+    card.dataset.isUs = isUser;
+    card.dataset.srch = `${(cmd.title || '').toLowerCase()} ${(cmd.url || '').toLowerCase()}`;
+    card.innerHTML = `
+      <span class="cli-cmd-icon">${cmd.icon || '🔗'}</span>
+      <div class="cli-cmd-title">${cliSanitize(cmd.title)}</div>
+      <div class="cli-cmd-syn" title="${cliSanitize(cmd.url)}">${cliSanitize(cmd.url)}</div>
+      <div class="cli-cmd-acts">
+        <button class="cli-cmd-act cp" title="Copy">📋</button>
+        <button class="cli-cmd-act ed" title="Edit">✏️</button>
+        <button class="cli-cmd-act dl" title="Delete">🗑️</button>
+      </div>
+    `;
+    
+    card.querySelector('.cp').addEventListener('click', e => {
+      e.stopPropagation();
+      copyText(cmd.url).then(() => {
+        const b = card.querySelector('.cp');
+        b.textContent = '✓';
+        b.style.background = 'var(--green)';
+        toast('Copied: ' + cmd.url.substring(0, 50));
+        setTimeout(() => {
+          b.textContent = '📋';
+          b.style.background = '';
+        }, 1600);
+      });
+    });
+    
+    card.querySelector('.ed').addEventListener('click', e => { e.stopPropagation(); cliOpenEdit(cmd, isUser, catId); });
+    
+    card.querySelector('.dl').addEventListener('click', e => {
+      e.stopPropagation();
+      if (!confirm('Delete this command?')) return;
+      if (isUser) {
+        CLI_STORE.set(CLI_KEYS.u, CLI_STORE.get(CLI_KEYS.u).filter(c => c.id !== cmd.id));
+      } else {
+        const d = CLI_STORE.get(CLI_KEYS.d);
+        if (!d.includes(cmd.id)) {
+          d.push(cmd.id);
+          CLI_STORE.set(CLI_KEYS.d, d);
+        }
+      }
+      card.remove();
+      cliUpdateStats();
+      toast('Command deleted', '⚠️');
+    });
+    
+    return card;
+  }
+
+  // Build category section
+  function cliBuildSec(cat, allC, uc, del, isSub, ai) {
+    const sec = document.createElement('div');
+    sec.className = 'cli-cat-section' + (isSub ? ' sub-cat' : '');
+    sec.id = `cli-cs-${cat.id}`;
+    sec.style.animationDelay = `${Math.min(ai * 0.04, 0.35)}s`;
+    
+    const dc = CLI_DEFAULT_CATS.find(d => d.id === cat.id);
+    const defC = (dc?.commands || []).filter(c => !del.includes(c.id) && !uc.some(u => u.id === c.id));
+    const uCC = uc.filter(c => c.category === cat.id);
+    const cnt = defC.length + uCC.length;
+    
+    const hdr = document.createElement('div');
+    hdr.className = 'cli-cat-header';
+    hdr.innerHTML = `
+      <span class="cli-cat-icon">${cat.icon}</span>
+      <span class="cli-cat-name">${cliSanitize(cat.name)}</span>
+      <span class="cli-cat-count">${cnt}</span>
+      ${isSub ? `<button class="cli-cat-del-btn" data-cid="${cat.id}">✕</button>` : ''}
+      <button class="cli-cat-toggle"><i>▼</i></button>
+    `;
+    
+    const line = document.createElement('div');
+    line.className = 'cli-cat-line';
+    
+    const grid = document.createElement('div');
+    grid.className = 'cli-cmds-grid';
+    grid.id = `cli-grid-${cat.id}`;
+    defC.forEach(cmd => grid.appendChild(cliBuildCard(cmd, false, cat.id)));
+    uCC.forEach(cmd => grid.appendChild(cliBuildCard(cmd, true, cat.id)));
+    
+    sec.append(hdr, line, grid);
+    
+    const col = CLI_GET_COL();
+    // Only collapse if explicitly set to true in localStorage
+    if (col[cat.id] === true) {
+      sec.classList.add('collapsed');
+    }
+    
+    // Toggle collapse when clicking the toggle button
+    const toggleBtn = hdr.querySelector('.cli-cat-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        const isC = sec.classList.toggle('collapsed');
+        CLI_SET_COL(cat.id, isC);
+      });
+    }
+    
+    const dB = hdr.querySelector('.cli-cat-del-btn');
+    if (dB) {
+      dB.addEventListener('click', e => {
+        e.stopPropagation();
+        cliDeleteCat(cat.id);
+      });
+    }
+    
+    return sec;
+  }
+
+  // Render all
+  function cliRenderAll() {
+    const cont = document.getElementById('cliCatsContainer');
+    cont.innerHTML = '';
+    const allC = cliGetAllCats();
+    const uc = CLI_STORE.get(CLI_KEYS.u);
+    const del = CLI_STORE.get(CLI_KEYS.d);
+    const top = allC.filter(c => !c.parentId);
+    
+    top.forEach((cat, i) => {
+      cont.appendChild(cliBuildSec(cat, allC, uc, del, false, i));
+      allC.filter(c => c.parentId === cat.id).forEach((s, j) => {
+        cont.appendChild(cliBuildSec(s, allC, uc, del, true, j));
+      });
+    });
+    
+    cliBuildDrops();
+    cliUpdateStats();
+  }
+
+  // Build dropdowns
+  function cliBuildDrops() {
+    const allC = cliGetAllCats();
+    const pop = (selId, withAll = false) => {
+      const sel = document.getElementById(selId);
+      if (!sel) return;
+      const prev = sel.value;
+      let html = withAll ? '<option value="all">All Categories</option>' : '<option value="">Select a category…</option>';
+      const addO = (cat, lvl) => {
+        html += `<option value="${cat.id}">${'  '.repeat(lvl)}${cat.icon} ${cat.name}</option>`;
+        allC.filter(c => c.parentId === cat.id).forEach(s => addO(s, lvl + 1));
+      };
+      allC.filter(c => !c.parentId).forEach(c => addO(c, 0));
+      sel.innerHTML = html;
+      if (prev && [...sel.options].some(o => o.value === prev)) sel.value = prev;
+    };
+    pop('cliSearchScope', true);
+    pop('cliAddCat');
+    pop('cliEditCat');
+    pop('cliCatParent');
+  }
+
+  // Search
+  let cliSearchTimer;
+  function cliDoSearch() {
+    const term = document.getElementById('cliSearchInput').value.toLowerCase().trim();
+    const scope = document.getElementById('cliSearchScope').value;
+    const clearBtn = document.getElementById('cliSearchClear');
+    let vis = 0;
+
+    // Show/hide clear button
+    clearBtn.classList.toggle('visible', term);
+
+    document.querySelectorAll('.cli-cmd-card').forEach(card => {
+      const txt = card.dataset.srch || '';
+      const catId = card.closest('.cli-cmds-grid')?.id?.replace('cli-grid-', '');
+      const match = (!term || txt.includes(term)) && (scope === 'all' || catId === scope);
+      card.classList.toggle('hidden', !match);
+      if (match) vis++;
+    });
+
+    document.getElementById('cliNoResults').classList.toggle('show', vis === 0 && (term || scope !== 'all'));
+  }
+
+  // Modal helpers
+  function cliOpenModal(id) {
+    document.getElementById(id).classList.add('open');
+  }
+  function cliCloseModal(id) {
+    document.getElementById(id).classList.remove('open');
+    const f = document.querySelector(`#${id} form`);
+    if (f) f.reset();
+  }
+
+  // Add command
+  function cliOpenAdd() {
+    cliBuildDrops();
+    cliOpenModal('cliAddModal');
+    setTimeout(() => document.getElementById('cliAddTitle').focus(), 80);
+  }
+
+  document.getElementById('cliAddForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const title = document.getElementById('cliAddTitle').value.trim();
+    const url = document.getElementById('cliAddUrl').value.trim();
+    const cat = document.getElementById('cliAddCat').value;
+    const icon = document.getElementById('cliAddIcon').value.trim() || '🔗';
+    
+    if (!title || !url || !cat) {
+      toast('Please fill all required fields', '⚠️');
+      return;
+    }
+    
+    const cmd = {
+      id: Date.now().toString(),
+      title: cliSanitize(title),
+      url,
+      category: cat,
+      icon: cliSanitize(icon)
+    };
+    
+    const cmds = CLI_STORE.get(CLI_KEYS.u);
+    cmds.push(cmd);
+    CLI_STORE.set(CLI_KEYS.u, cmds);
+    
+    const grid = document.getElementById(`cli-grid-${cat}`);
+    if (!grid) {
+      cliRenderAll();
+    } else {
+      grid.appendChild(cliBuildCard(cmd, true, cat));
+      cliUpdateStats();
+    }
+    
+    cliCloseModal('cliAddModal');
+    toast('Command added');
+  });
+
+  // Edit command
+  function cliOpenEdit(cmd, isUser, catId) {
+    cliBuildDrops();
+    document.getElementById('cliEditId').value = cmd.id;
+    document.getElementById('cliEditIsUser').value = isUser;
+    document.getElementById('cliEditOrigCat').value = catId;
+    document.getElementById('cliEditTitle').value = cmd.title;
+    document.getElementById('cliEditUrl').value = cmd.url;
+    document.getElementById('cliEditIcon').value = cmd.icon || '🔗';
+    setTimeout(() => {
+      document.getElementById('cliEditCat').value = catId;
+      cliOpenModal('cliEditModal');
+      document.getElementById('cliEditTitle').focus();
+    }, 50);
+  }
+
+  document.getElementById('cliEditForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = document.getElementById('cliEditId').value;
+    const isUser = document.getElementById('cliEditIsUser').value === 'true';
+    const origCat = document.getElementById('cliEditOrigCat').value;
+    const title = document.getElementById('cliEditTitle').value.trim();
+    const url = document.getElementById('cliEditUrl').value.trim();
+    const cat = document.getElementById('cliEditCat').value;
+    const icon = document.getElementById('cliEditIcon').value.trim() || '🔗';
+    
+    if (!title || !url || !cat) {
+      toast('Please fill all required fields', '⚠️');
+      return;
+    }
+    
+    const upd = {
+      id,
+      title: cliSanitize(title),
+      url,
+      category: cat,
+      icon: cliSanitize(icon)
+    };
+    
+    const cmds = CLI_STORE.get(CLI_KEYS.u);
+    const idx = cmds.findIndex(c => c.id === id);
+    if (idx !== -1) {
+      cmds[idx] = upd;
+    } else {
+      cmds.push(upd);
+      if (!isUser) {
+        const d = CLI_STORE.get(CLI_KEYS.d);
+        if (!d.includes(id)) {
+          d.push(id);
+          CLI_STORE.set(CLI_KEYS.d, d);
+        }
+      }
+    }
+    CLI_STORE.set(CLI_KEYS.u, cmds);
+    
+    const card = document.querySelector(`.cli-cmd-card[data-id="${id}"]`);
+    const og = document.getElementById(`cli-grid-${origCat}`);
+    const ng = document.getElementById(`cli-grid-${cat}`);
+    if (card) {
+      card.querySelector('.cli-cmd-title').textContent = title;
+      card.querySelector('.cli-cmd-syn').textContent = url;
+      card.querySelector('.cli-cmd-icon').textContent = cliSanitize(icon);
+      card.dataset.srch = `${title.toLowerCase()} ${url.toLowerCase()}`;
+      card.dataset.isUs = true;
+      if (og && ng && og !== ng) {
+        card.remove();
+        ng.appendChild(card);
+      }
+    }
+    
+    cliCloseModal('cliEditModal');
+    toast('Command updated');
+  });
+
+  // Category modal
+  function cliOpenCategories() {
+    cliRenderCatList();
+    cliBuildDrops();
+    cliOpenModal('cliCatModal');
+  }
+
+  function cliRenderCatList() {
+    const wrap = document.getElementById('cliCatList');
+    const allC = cliGetAllCats();
+    wrap.innerHTML = '';
+    
+    if (!allC.length) {
+      wrap.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--text-faint);font-size:12px">No categories</div>';
+      return;
+    }
+    
+    const addLi = (cat, lvl) => {
+      const li = document.createElement('div');
+      li.className = 'kb-cat-item ' + (cat.isDefault ? 'is-default' : 'is-custom');
+      if (lvl > 0) li.style.paddingLeft = `${14 + lvl * 14}px`;
+      li.innerHTML = `
+        <span style="font-size:17px">${cat.icon}</span>
+        <span class="kb-cat-name">${cliSanitize(cat.name)}</span>
+        <span class="kb-cat-actions">
+          <button class="kb-cat-btn" data-edit="${cat.id}">✏️</button>
+          <button class="kb-cat-btn danger" data-del="${cat.id}">🗑️</button>
+        </span>
+      `;
+      li.querySelector('[data-edit]').addEventListener('click', () => cliEditCatPrompt(cat));
+      li.querySelector('[data-del]').addEventListener('click', () => {
+        cliDeleteCat(cat.id);
+        cliRenderCatList();
+      });
+      wrap.appendChild(li);
+      allC.filter(c => c.parentId === cat.id).forEach(s => addLi(s, lvl + 1));
+    };
+    
+    allC.filter(c => !c.parentId).forEach(c => addLi(c, 0));
+  }
+
+  function cliEditCatPrompt(cat) {
+    const n = prompt('Category name:', cat.name);
+    if (!n?.trim()) return;
+    const ic = prompt('Icon:', cat.icon) || cat.icon;
+    
+    const st = CLI_STORE.get(CLI_KEYS.c);
+    const idx = st.findIndex(c => c.id === cat.id);
+    const upd = { ...cat, name: cliSanitize(n.trim()), icon: cliSanitize(ic), isDefault: false };
+    idx !== -1 ? st[idx] = upd : st.push(upd);
+    CLI_STORE.set(CLI_KEYS.c, st);
+    
+    const sec = document.getElementById(`cli-cs-${cat.id}`);
+    if (sec) {
+      sec.querySelector('.cli-cat-icon').textContent = upd.icon;
+      sec.querySelector('.cli-cat-name').textContent = upd.name;
+    }
+    cliRenderCatList();
+    toast('Category updated');
+  }
+
+  function cliDeleteCat(catId) {
+    const uc = CLI_STORE.get(CLI_KEYS.u);
+    const cnt = uc.filter(c => c.category === catId).length;
+    if (!confirm(`Delete this category?${cnt ? `\n\nAlso deletes ${cnt} custom command(s).` : ''}`)) return;
+    
+    const cat = cliGetAllCats().find(c => c.id === catId);
+    const st = CLI_STORE.get(CLI_KEYS.c);
+    
+    if (cat?.isDefault) {
+      const f = st.filter(c => c.id !== catId);
+      f.push({ id: catId, name: cat.name, icon: cat.icon, isDefault: true, isDeleted: true });
+      CLI_STORE.set(CLI_KEYS.c, f);
+    } else {
+      CLI_STORE.set(CLI_KEYS.c, st.filter(c => c.id !== catId));
+    }
+    
+    CLI_STORE.set(CLI_KEYS.u, uc.filter(c => c.category !== catId));
+    document.getElementById(`cli-cs-${catId}`)?.remove();
+    cliBuildDrops();
+    cliUpdateStats();
+    toast('Category deleted', '⚠️');
+  }
+
+  function cliAddCategory() {
+    const name = document.getElementById('cliCatName').value.trim();
+    const icon = document.getElementById('cliCatIcon').value.trim() || '📁';
+    const parent = document.getElementById('cliCatParent').value || null;
+    
+    if (!name) {
+      toast('Name is required', '⚠️');
+      return;
+    }
+    
+    const nc = {
+      id: 'cus_' + Date.now(),
+      name: cliSanitize(name),
+      icon: cliSanitize(icon),
+      isDefault: false,
+      parentId: parent || null
+    };
+    
+    const st = CLI_STORE.get(CLI_KEYS.c);
+    st.push(nc);
+    CLI_STORE.set(CLI_KEYS.c, st);
+    
+    const allC = cliGetAllCats();
+    const uc = CLI_STORE.get(CLI_KEYS.u);
+    const del = CLI_STORE.get(CLI_KEYS.d);
+    document.getElementById('cliCatsContainer').appendChild(cliBuildSec(nc, allC, uc, del, !!parent, 0));
+    
+    cliRenderCatList();
+    cliBuildDrops();
+    cliUpdateStats();
+    document.getElementById('cliCatName').value = '';
+    document.getElementById('cliCatIcon').value = '';
+    toast('Category added');
+  }
+
+  // Backup/Restore
+  function cliOpenBackup() {
+    cliOpenModal('cliBackupModal');
+  }
+
+  function cliExport() {
+    const data = {
+      userCommands: CLI_STORE.get(CLI_KEYS.u),
+      customCategories: CLI_STORE.get(CLI_KEYS.c),
+      deletedCommands: CLI_STORE.get(CLI_KEYS.d),
+      exportDate: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `cli-backup-${new Date().toISOString().slice(0, 10)}.json`
+    });
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Backup exported');
+  }
+
+  function cliImport(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data || typeof data !== 'object') throw new Error('Invalid format');
+        
+        const rep = confirm('Replace existing data?\n\nOK = Replace all  |  Cancel = Merge only new');
+        if (rep) {
+          if (Array.isArray(data.userCommands)) CLI_STORE.set(CLI_KEYS.u, data.userCommands);
+          if (Array.isArray(data.customCategories)) CLI_STORE.set(CLI_KEYS.c, data.customCategories);
+          if (Array.isArray(data.deletedCommands)) CLI_STORE.set(CLI_KEYS.d, data.deletedCommands);
+          toast('Data replaced — reloading…');
+        } else {
+          if (Array.isArray(data.userCommands)) {
+            const ex = CLI_STORE.get(CLI_KEYS.u);
+            const ids = new Set(ex.map(c => c.id));
+            CLI_STORE.set(CLI_KEYS.u, [...ex, ...data.userCommands.filter(c => !ids.has(c.id))]);
+          }
+          if (Array.isArray(data.customCategories)) {
+            const ex = CLI_STORE.get(CLI_KEYS.c);
+            const ids = new Set(ex.map(c => c.id));
+            CLI_STORE.set(CLI_KEYS.c, [...ex, ...data.customCategories.filter(c => !ids.has(c.id))]);
+          }
+          toast('Data merged — reloading…');
+        }
+        setTimeout(() => location.reload(), 1000);
+      } catch (err) {
+        toast('Import failed: ' + err.message, '⚠️');
+      }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  // Event wiring
+  document.getElementById('cliSearchInput').addEventListener('input', () => {
+    clearTimeout(cliSearchTimer);
+    cliSearchTimer = setTimeout(cliDoSearch, 140);
+  });
+  document.getElementById('cliSearchScope').addEventListener('change', cliDoSearch);
+
+  // CLI init
+  function cliInit() {
+    cliRenderAll();
+  }
+
+  // Add CLI init to DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    cliInit();
+  });
 
   </script>
 </body>
