@@ -1329,7 +1329,6 @@
         </div>
         <div class="topbar-actions">
           <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle dark mode">🌙</button>
-          <button class="btn btn-ghost btn-sm" onclick="window.print()">🖨 Print</button>
         </div>
       </div>
 
