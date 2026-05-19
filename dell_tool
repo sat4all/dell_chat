@@ -1,0 +1,3085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dell PowerStore Chat Support Toolkit — EMEA Midrange Storage Support">
+  <meta name="theme-color" content="#0a0f1e">
+  <title>Dell Support Toolkit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────
+       CSS CUSTOM PROPERTIES
+    ───────────────────────────────────────────── */
+    :root {
+      --bg:           #f5f6fa;
+      --surface:      #ffffff;
+      --surface2:     #f0f2f8;
+      --border:       #e2e5ef;
+      --border2:      #c8cede;
+      --text:         #0d111c;
+      --text-muted:   #6b7280;
+      --text-faint:   #9ca3af;
+      --accent:       #0057ff;
+      --accent-hover: #0042cc;
+      --accent-soft:  #e8f0ff;
+      --green:        #00b67a;
+      --green-soft:   #e0f7ef;
+      --red:          #e53e3e;
+      --red-soft:     #fee8e8;
+      --amber:        #f59e0b;
+      --amber-soft:   #fef3c7;
+      --purple:       #7c3aed;
+      --purple-soft:  #ede9fe;
+      --navy:         #0a0f1e;
+      --shadow-sm:    0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+      --shadow:       0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.05);
+      --shadow-lg:    0 20px 60px rgba(0,0,0,.12), 0 4px 16px rgba(0,0,0,.06);
+      --radius-sm:    8px;
+      --radius:       14px;
+      --radius-lg:    20px;
+      --radius-xl:    28px;
+      --font:         'DM Sans', sans-serif;
+      --mono:         'DM Mono', monospace;
+      --transition:   0.18s cubic-bezier(.4,0,.2,1);
+      --sidebar-w:    260px;
+    }
+
+    /* Dark Mode */
+    .dark {
+      --bg:           #0d1117;
+      --surface:      #161b27;
+      --surface2:     #1c2232;
+      --border:       #252d3e;
+      --border2:      #2f3a52;
+      --text:         #e8ecf5;
+      --text-muted:   #8892a4;
+      --text-faint:   #5a6478;
+      --accent-soft:  #0e2054;
+      --green-soft:   #042b1e;
+      --red-soft:     #2d0f0f;
+      --amber-soft:   #2d1f05;
+      --purple-soft:  #1e1040;
+      --shadow-sm:    0 1px 3px rgba(0,0,0,.4);
+      --shadow:       0 4px 16px rgba(0,0,0,.5);
+      --shadow-lg:    0 20px 60px rgba(0,0,0,.6);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET + BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 15px; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    button { font-family: var(--font); cursor: pointer; border: none; outline: none; }
+    input, textarea, select { font-family: var(--font); }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -50px; left: 16px;
+      background: var(--accent); color: #fff; padding: 8px 16px;
+      border-radius: var(--radius-sm); z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ─────────────────────────────────────────────
+       LAYOUT: SIDEBAR + MAIN
+    ───────────────────────────────────────────── */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed; left: 0; top: 0; bottom: 0;
+      overflow-y: auto; overflow-x: hidden;
+      display: flex; flex-direction: column;
+      z-index: 200;
+      transition: transform var(--transition), background var(--transition);
+    }
+
+    .sidebar-logo {
+      padding: 20px 20px 12px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo-mark {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--accent), #0042cc);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #fff; font-size: 14px; letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo-text { font-weight: 600; font-size: 14px; line-height: 1.2; }
+    .sidebar-logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 400; }
+
+    .sidebar-nav { padding: 12px 10px; flex: 1; }
+
+    .nav-section-label {
+      font-size: 10.5px; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text-faint);
+      padding: 4px 10px 8px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      font-size: 13.5px; font-weight: 500; color: var(--text-muted);
+      cursor: pointer; transition: all var(--transition);
+      margin-bottom: 2px; border: none; background: none; width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: var(--accent-soft); color: var(--accent); }
+    .nav-item.active .nav-icon { color: var(--accent); }
+
+    .nav-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: .75; }
+    .nav-item.active .nav-icon { opacity: 1; }
+
+    .sidebar-bottom {
+      padding: 12px 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Main content */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 28px;
+      max-width: 100%;
+    }
+
+    /* Topbar */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px; gap: 12px; flex-wrap: wrap;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+    .topbar-sub { font-size: 13px; color: var(--text-muted); margin-top: 1px; }
+
+    .topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+    .hamburger {
+      display: none;
+      padding: 7px; border-radius: var(--radius-sm);
+      background: var(--surface2); color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTIONS (pages)
+    ───────────────────────────────────────────── */
+    .page { display: none; animation: fadeIn .25s ease; }
+    .page.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─────────────────────────────────────────────
+       CARDS
+    ───────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
+      transition: background var(--transition), border var(--transition);
+    }
+
+    .card + .card { margin-top: 20px; }
+
+    .card-title {
+      font-size: 15px; font-weight: 700;
+      letter-spacing: -0.2px; margin-bottom: 18px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .card-title-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────────
+       FORM ELEMENTS
+    ───────────────────────────────────────────── */
+    .form-group { margin-bottom: 16px; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    label {
+      display: block; font-size: 12.5px; font-weight: 600;
+      color: var(--text-muted); margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+
+    .form-control {
+      width: 100%; padding: 10px 13px;
+      background: var(--surface2); color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 14px;
+      transition: all var(--transition); outline: none;
+      appearance: none; -webkit-appearance: none;
+    }
+
+    .form-control:hover { border-color: var(--border2); }
+    .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,87,255,.12); background: var(--surface); }
+
+    textarea.form-control { resize: vertical; min-height: 80px; }
+
+    .input-group { display: flex; align-items: stretch; }
+    .input-group-text {
+      padding: 10px 12px; background: var(--surface2);
+      border: 1.5px solid var(--border); border-right: none;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      color: var(--text-muted); font-size: 14px; font-weight: 500;
+    }
+    .input-group .form-control { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+    .form-hint {
+      font-size: 11.5px; color: var(--text-faint); margin-top: 5px;
+    }
+
+    /* ─────────────────────────────────────────────
+       BUTTONS
+    ───────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 7px; padding: 9px 16px; border-radius: var(--radius-sm);
+      font-size: 13.5px; font-weight: 600; letter-spacing: 0.01em;
+      transition: all var(--transition); position: relative; overflow: hidden;
+      white-space: nowrap; flex-shrink: 0;
+    }
+
+    .btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,0.14); opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .btn:hover::after { opacity: 1; }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 1px 3px rgba(0,87,255,.3);
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-success {
+      background: var(--green); color: #fff;
+      box-shadow: 0 1px 3px rgba(0,182,122,.3);
+    }
+
+    .btn-danger {
+      background: var(--red); color: #fff;
+      box-shadow: 0 1px 3px rgba(229,62,62,.3);
+    }
+
+    .btn-ghost {
+      background: var(--surface2); color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--border); }
+
+    .btn-amber {
+      background: var(--amber); color: #fff;
+      box-shadow: 0 1px 3px rgba(245,158,11,.3);
+    }
+
+    .btn-outline {
+      background: transparent; color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--surface2); color: var(--text); }
+
+    .btn-sm { padding: 6px 11px; font-size: 12.5px; }
+    .btn-lg { padding: 12px 22px; font-size: 15px; border-radius: var(--radius); }
+    .btn-block { width: 100%; }
+    .btn-icon { padding: 9px; border-radius: var(--radius-sm); }
+
+    /* ─────────────────────────────────────────────
+       BADGE
+    ───────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 8px; border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-blue { background: var(--accent-soft); color: var(--accent); }
+    .badge-green { background: var(--green-soft); color: var(--green); }
+    .badge-red { background: var(--red-soft); color: var(--red); }
+    .badge-amber { background: var(--amber-soft); color: #b45309; }
+
+    /* ─────────────────────────────────────────────
+       QUICK COPY BUTTONS GRID
+    ───────────────────────────────────────────── */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .quick-btn {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      font-size: 12.5px; font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-align: center;
+      position: relative;
+    }
+    .quick-btn:hover {
+      background: var(--accent-soft); color: var(--accent);
+      border-color: rgba(0,87,255,.25);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    .quick-btn:active { transform: scale(0.97); }
+
+    /* Tooltip */
+    .quick-btn::before {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%);
+      background: var(--navy); color: #e8ecf5;
+      padding: 7px 12px; border-radius: 8px;
+      font-size: 11.5px; font-weight: 400; line-height: 1.5;
+      white-space: normal; word-break: break-word;
+      width: 280px; text-align: left;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+    .quick-btn:hover::before { opacity: 1; }
+
+    /* ─────────────────────────────────────────────
+       QUICK LINKS BAR
+    ───────────────────────────────────────────── */
+    .links-bar {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+    }
+
+    .link-chip {
+      display: inline-flex; align-items: center;
+      padding: 5px 11px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      background: var(--surface2); border: 1px solid var(--border);
+      cursor: pointer; transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .link-chip:hover {
+      background: var(--accent-soft); color: var(--accent);
+      border-color: rgba(0,87,255,.3);
+    }
+
+    /* ─────────────────────────────────────────────
+       HANDOVER ENTRIES
+    ───────────────────────────────────────────── */
+    .entry-block {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 12px;
+      transition: border-color var(--transition);
+    }
+    .entry-block:hover { border-color: var(--border2); }
+
+    .entry-block .entry-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .entry-block .entry-label {
+      font-size: 12.5px; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .entry-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    .entry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* ─────────────────────────────────────────────
+       CODE RED SECTION
+    ───────────────────────────────────────────── */
+    .cr-warning-banner {
+      background: var(--red-soft);
+      border: 1.5px solid rgba(229,62,62,.25);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 12.5px; font-weight: 600; color: var(--red);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .cr-section-header {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--red);
+      padding: 14px 0 10px; border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+
+    .check-group { display: flex; flex-direction: column; gap: 8px; }
+
+    .check-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; background: var(--surface2);
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      cursor: pointer; transition: all var(--transition);
+    }
+    .check-item:hover { border-color: var(--border2); }
+    .check-item input[type="checkbox"] {
+      width: 16px; height: 16px; accent-color: var(--accent);
+      flex-shrink: 0; cursor: pointer;
+    }
+    .check-item label { margin: 0; font-size: 13.5px; color: var(--text); font-weight: 500; cursor: pointer; }
+    .check-item.required label { color: var(--red); }
+
+    .word-counter {
+      font-size: 11.5px; color: var(--text-faint);
+      text-align: right; margin-top: 4px;
+    }
+    .word-counter.warn { color: var(--amber); }
+    .word-counter.over { color: var(--red); }
+
+    /* ─────────────────────────────────────────────
+       WORLD CLOCK
+    ───────────────────────────────────────────── */
+    .clocks-scroll {
+      display: flex; gap: 12px;
+      overflow-x: auto; padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+    }
+    .clocks-scroll::-webkit-scrollbar { height: 4px; }
+    .clocks-scroll::-webkit-scrollbar-track { background: transparent; }
+    .clocks-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+    .clock-card {
+      flex-shrink: 0; width: 175px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px; cursor: grab;
+      scroll-snap-align: start;
+      transition: all var(--transition);
+      position: relative;
+    }
+    .clock-card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+    .clock-card.dragging { opacity: 0.5; }
+
+    .clock-city { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .clock-time { font-family: var(--mono); font-size: 26px; font-weight: 500; color: var(--text); letter-spacing: -0.5px; line-height: 1; }
+    .clock-meta { font-size: 10.5px; color: var(--text-faint); margin-top: 8px; }
+    .clock-remove {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--red-soft); color: var(--red);
+      border: none; border-radius: 50%; width: 20px; height: 20px;
+      font-size: 12px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity var(--transition);
+    }
+    .clock-card:hover .clock-remove { opacity: 1; }
+
+    .search-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); z-index: 50;
+      max-height: 220px; overflow-y: auto;
+      box-shadow: var(--shadow);
+    }
+    .search-opt {
+      padding: 9px 13px; font-size: 13px; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background var(--transition);
+    }
+    .search-opt:hover { background: var(--surface2); }
+    .search-opt-time { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+    .search-wrap { position: relative; }
+
+    /* ─────────────────────────────────────────────
+       POSTCODE TABLE
+    ───────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+
+    table {
+      border-collapse: collapse; width: 100%;
+      font-size: 12.5px; background: var(--surface);
+    }
+    th {
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-size: 11px; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; padding: 10px 12px;
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+      text-align: left;
+    }
+    td {
+      padding: 9px 12px; border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+
+    td.tc { text-align: center; }
+    .yes { color: var(--green); font-weight: 700; }
+    .no  { color: var(--red); font-weight: 700; }
+    .wud { color: #0284c7; font-weight: 700; }
+
+    .region-row {
+      background: var(--surface2) !important;
+      cursor: pointer;
+    }
+    .region-row td {
+      font-size: 12px; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+    .region-row:hover td { color: var(--text); }
+    .collapsed { display: none; }
+
+    /* Filter row */
+    .table-filters {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 12px; align-items: center;
+    }
+    .filter-input {
+      padding: 7px 12px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border); background: var(--surface2);
+      color: var(--text); font-size: 13px; outline: none;
+      transition: all var(--transition);
+    }
+    .filter-input:focus { border-color: var(--accent); background: var(--surface); }
+    .filter-input::placeholder { color: var(--text-faint); }
+
+    /* ─────────────────────────────────────────────
+       TOAST NOTIFICATION
+    ───────────────────────────────────────────── */
+    .toast-container {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .toast {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--navy); color: #e8ecf5;
+      padding: 12px 18px; border-radius: var(--radius);
+      font-size: 13.5px; font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      transform: translateX(120%); opacity: 0;
+      transition: all .35s cubic-bezier(.22,.68,0,1.2);
+      min-width: 220px; max-width: 360px;
+    }
+    .dark .toast { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+    .toast.show { transform: translateX(0); opacity: 1; }
+    .toast-icon { font-size: 17px; flex-shrink: 0; }
+
+    /* ─────────────────────────────────────────────
+       MODAL
+    ───────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.45);
+      z-index: 500; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .2s ease;
+      padding: 16px;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: var(--surface); border-radius: var(--radius-xl);
+      border: 1px solid var(--border); box-shadow: var(--shadow-lg);
+      width: 100%; max-width: 640px; max-height: 88vh;
+      overflow-y: auto;
+      transform: translateY(20px) scale(.97); opacity: 0;
+      transition: all .25s cubic-bezier(.22,.68,0,1.2);
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); opacity: 1; }
+
+    .modal-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: var(--surface); z-index: 1;
+    }
+    .modal-head h2 { font-size: 16px; font-weight: 700; }
+    .modal-close {
+      width: 30px; height: 30px; border-radius: 50%; background: var(--surface2);
+      border: 1px solid var(--border); color: var(--text-muted);
+      font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .modal-close:hover { background: var(--red-soft); color: var(--red); }
+    .modal-body { padding: 20px 24px; }
+    .modal-foot {
+      padding: 16px 24px; border-top: 1px solid var(--border);
+      display: flex; justify-content: flex-end; gap: 8px;
+    }
+
+    .msg-edit-item {
+      margin-bottom: 16px; padding: 14px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .msg-edit-item label { color: var(--text); font-size: 12.5px; margin-bottom: 6px; }
+    .msg-edit-item textarea { min-height: 70px; }
+
+    /* ─────────────────────────────────────────────
+       THEME TOGGLE
+    ───────────────────────────────────────────── */
+    .theme-toggle {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      color: var(--text-muted); font-size: 16px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .theme-toggle:hover { background: var(--accent-soft); color: var(--accent); }
+
+    /* ─────────────────────────────────────────────
+       COPY ICON
+    ───────────────────────────────────────────── */
+    .copy-icon {
+      width: 20px; height: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 14px;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+    .copy-icon:hover { color: var(--accent); transform: scale(1.1); }
+    .copy-icon.copied { color: var(--green); }
+    .copy-wrapper {
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* ─────────────────────────────────────────────
+       MOBILE RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        box-shadow: var(--shadow-lg);
+      }
+      .sidebar.open { transform: translateX(0); }
+
+      .main { margin-left: 0; padding: 16px; }
+      .hamburger { display: flex; }
+      .topbar { margin-bottom: 18px; }
+
+      .entry-grid { grid-template-columns: 1fr; }
+      .quick-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+
+      .mobile-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,.45);
+        z-index: 199; display: none;
+      }
+      .mobile-overlay.open { display: block; }
+
+      .toast-container { bottom: 16px; right: 16px; left: 16px; }
+      .toast { max-width: 100%; }
+    }
+
+    @media (max-width: 480px) {
+      .quick-grid { grid-template-columns: repeat(3, 1fr); }
+      .quick-btn { padding: 8px 6px; font-size: 11.5px; }
+    }
+
+    /* ─────────────────────────────────────────────
+       DIVIDER
+    ───────────────────────────────────────────── */
+    .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+    /* ─────────────────────────────────────────────
+       STATUS BADGE
+    ───────────────────────────────────────────── */
+    .status-online {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: var(--green);
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,182,122,.4); }
+      50% { box-shadow: 0 0 0 5px rgba(0,182,122,0); }
+    }
+
+    /* ─────────────────────────────────────────────
+       NAMING TOOL RESULT PREVIEW
+    ───────────────────────────────────────────── */
+    .naming-preview {
+      background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px 16px;
+      font-family: var(--mono); font-size: 13px; color: var(--text);
+      letter-spacing: 0.01em; line-height: 1.8;
+      margin-top: 14px; min-height: 46px;
+    }
+    .naming-preview .part { color: var(--text-muted); }
+    .naming-preview .val { color: var(--accent); font-weight: 500; }
+
+    /* Scroll indicator for mobile */
+    @media (max-width: 600px) {
+      .clocks-scroll::after {
+        content: '→';
+        color: var(--text-faint); font-size: 18px;
+        display: flex; align-items: center;
+        padding-right: 8px; flex-shrink: 0;
+      }
+    }
+
+    /* SA coverage table */
+    .sa-table th { background: #0a0f1e; color: #fff; }
+    .dark .sa-table th { background: var(--navy); }
+
+    /* Print styles */
+    @media print {
+      .sidebar, .topbar, .toast-container, .modal-overlay { display: none !important; }
+      .main { margin-left: 0 !important; padding: 0 !important; }
+      .card { box-shadow: none !important; border: 1px solid #ddd !important; }
+      body { background: #fff !important; color: #000 !important; }
+    }
+
+    /* ─────────────────────────────────────────────
+       KB RESOURCE HUB STYLES
+    ───────────────────────────────────────────── */
+    /* KB search bar */
+    .kb-search-wrap {
+      position: relative; margin-bottom: 22px;
+    }
+    .kb-search-wrap input {
+      width: 100%; padding: 11px 16px 11px 42px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius); font-size: 14px; color: var(--text);
+      outline: none; font-family: var(--font);
+      transition: all var(--transition);
+    }
+    .kb-search-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,87,255,.1); }
+    .kb-search-wrap input::placeholder { color: var(--text-faint); }
+    .kb-search-icon {
+      position: absolute; left: 14px; top: 50%;
+      transform: translateY(-50%); color: var(--text-faint);
+      pointer-events: none; font-size: 15px;
+    }
+    .kb-search-clear {
+      position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%);
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 50%; width: 22px; height: 22px;
+      color: var(--text-faint); font-size: 13px; cursor: pointer;
+      display: none; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .kb-search-clear.visible { display: flex; }
+    .kb-search-clear:hover { color: var(--text); background: var(--border); }
+
+    /* KB stats row */
+    .kb-stats {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 10px; margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .kb-stats { grid-template-columns: repeat(2,1fr); } }
+
+    .kb-stat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px;
+      position: relative; overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .kb-stat:hover { border-color: var(--accent); }
+    .kb-stat::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg, var(--accent), #00c8e0);
+      opacity: 0; transition: opacity var(--transition);
+    }
+    .kb-stat:hover::before { opacity: 1; }
+    .kb-stat-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-faint); margin-bottom: 5px; }
+    .kb-stat-value { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
+    .kb-stat-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 24px; opacity: .08; }
+
+    /* KB section header */
+    .kb-section { margin-bottom: 36px; }
+    .kb-section-head {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .kb-section-head h3 { font-size: 14.5px; font-weight: 700; color: var(--text); }
+    .kb-section-divider { flex: 1; height: 1px; background: var(--border); }
+    .kb-section-count { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
+    .kb-section-icon { font-size: 16px; }
+
+    /* KB links grid */
+    .kb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+    }
+
+    /* KB link card */
+    .kb-link-card {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 14px; background: var(--surface);
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      text-decoration: none; color: var(--text);
+      transition: all var(--transition); position: relative;
+      overflow: hidden; min-height: 72px;
+    }
+    .kb-link-card:hover {
+      border-color: var(--accent); background: var(--surface2);
+      transform: translateY(-2px); box-shadow: var(--shadow);
+      color: var(--text);
+    }
+    .kb-link-card.kb-hidden { display: none; }
+
+    .kb-card-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: var(--accent-soft); border: 1px solid rgba(0,87,255,.15);
+      border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
+      font-size: 17px; transition: all var(--transition);
+    }
+    .dark .kb-card-icon { background: var(--accent-soft); }
+    .kb-link-card:hover .kb-card-icon { background: rgba(0,87,255,.2); border-color: rgba(0,87,255,.35); }
+
+    .kb-card-body { flex: 1; min-width: 0; }
+    .kb-card-title { font-size: 13px; font-weight: 600; line-height: 1.4; margin-bottom: 3px; }
+    .kb-card-url {
+      font-size: 11px; color: var(--text-faint);
+      font-family: var(--mono); overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    .kb-card-arrow {
+      align-self: center; color: var(--text-faint);
+      opacity: 0; font-size: 13px; flex-shrink: 0;
+      transform: translateX(-4px); transition: all var(--transition);
+    }
+    .kb-link-card:hover .kb-card-arrow { opacity: 1; transform: translateX(0); }
+
+    .kb-card-del {
+      position: absolute; top: 7px; right: 7px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--red-soft); border: 1px solid rgba(229,62,62,.2);
+      color: var(--red); font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity var(--transition);
+      z-index: 2;
+    }
+    .kb-link-card:hover .kb-card-del { opacity: 1; }
+    .kb-card-del:hover { background: rgba(229,62,62,.2); }
+
+    /* KB no results */
+    .kb-no-results {
+      display: none; text-align: center;
+      padding: 60px 20px; color: var(--text-faint);
+    }
+    .kb-no-results.show { display: block; }
+    .kb-no-results-icon { font-size: 42px; margin-bottom: 14px; opacity: .5; }
+    .kb-no-results h3 { font-size: 15px; color: var(--text-muted); margin-bottom: 6px; }
+
+    /* KB toolbar */
+    .kb-toolbar {
+      display: flex; gap: 8px; align-items: center;
+      flex-wrap: wrap; margin-bottom: 20px;
+    }
+
+    /* KB category filter chips */
+    .kb-filter-chip {
+      padding: 5px 13px; border-radius: 100px;
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      cursor: pointer; transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .kb-filter-chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .kb-filter-chip.active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+    /* KB add link modal overrides */
+    .kb-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      backdrop-filter: blur(6px); z-index: 600;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; opacity: 0; pointer-events: none;
+      transition: opacity .2s ease;
+    }
+    .kb-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .kb-modal-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);
+      width: 100%; max-width: 500px; max-height: 88vh; overflow-y: auto;
+      transform: translateY(16px) scale(.97); opacity: 0;
+      transition: all .22s cubic-bezier(.22,.68,0,1.2);
+    }
+    .kb-modal-overlay.open .kb-modal-box { transform: translateY(0) scale(1); opacity: 1; }
+
+    .kb-modal-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 22px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: var(--surface); z-index: 1;
+    }
+    .kb-modal-head h2 { font-size: 15px; font-weight: 700; }
+    .kb-modal-close {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-muted); font-size: 15px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .kb-modal-close:hover { background: var(--red-soft); color: var(--red); }
+    .kb-modal-body { padding: 18px 22px; }
+    .kb-modal-foot {
+      padding: 14px 22px; border-top: 1px solid var(--border);
+      display: flex; gap: 8px; justify-content: flex-end;
+    }
+
+    /* manage categories list */
+    .kb-cat-list { display: flex; flex-direction: column; gap: 6px; max-height: 240px; overflow-y: auto; margin-bottom: 14px; }
+    .kb-cat-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      transition: border-color var(--transition);
+    }
+    .kb-cat-item:hover { border-color: var(--border2); }
+    .kb-cat-item.is-default { border-left: 2px solid var(--accent); }
+    .kb-cat-item.is-custom  { border-left: 2px solid var(--green); }
+    .kb-cat-name { flex: 1; font-size: 13px; font-weight: 500; }
+    .kb-cat-actions { display: flex; gap: 4px; }
+    .kb-cat-btn {
+      width: 26px; height: 26px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text-muted); font-size: 12px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .kb-cat-btn:hover { background: var(--surface2); color: var(--text); }
+    .kb-cat-btn.danger:hover { background: var(--red-soft); border-color: rgba(229,62,62,.3); color: var(--red); }
+    .kb-cat-btn:disabled { opacity: .25; pointer-events: none; }
+
+    /* backup box inside KB modals */
+    .kb-backup-box {
+      background: var(--accent-soft); border: 1px solid rgba(0,87,255,.2);
+      border-radius: var(--radius-sm); padding: 14px; margin-bottom: 14px;
+    }
+    .kb-backup-box h4 { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+    .kb-backup-box p { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+    .kb-backup-actions { display: flex; gap: 8px; }
+    .dark .kb-backup-box { background: var(--accent-soft); }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Mobile overlay -->
+  <div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Modal: Edit Messages -->
+  <div class="modal-overlay" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2 id="editModalTitle">Edit Button Messages</h2>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="editModalBody"></div>
+      <div class="modal-foot">
+        <button class="btn btn-outline btn-sm" onclick="resetMessages()">Reset Defaults</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="saveMessages()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- ─── SIDEBAR ─── -->
+    <nav class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-mark" aria-hidden="true">D</div>
+        <div>
+          <div class="sidebar-logo-text">Dell Toolkit</div>
+          <div class="sidebar-logo-sub">PowerStore EMEA</div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="nav-section-label">Tools</div>
+        <button class="nav-item active" onclick="showPage('chat')" aria-current="page">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h4m-7 6a9 9 0 110-18 9 9 0 010 18z"/></svg>
+          Chat Support
+        </button>
+        <button class="nav-item" onclick="showPage('naming')">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h10M7 12h10M7 17h4"/></svg>
+          Naming Tool
+        </button>
+        <button class="nav-item" onclick="showPage('handover')">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/></svg>
+          Handover Email
+        </button>
+        <button class="nav-item" onclick="showPage('codered')">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          Code Red
+        </button>
+        <button class="nav-item" onclick="showPage('clock')">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 6v6l4 2"/></svg>
+          World Clock
+        </button>
+        <button class="nav-item" onclick="showPage('postcode')">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 9m0 8V9m0 0L9 7"/></svg>
+          Post Codes
+        </button>
+        <button class="nav-item" onclick="showPage('links')">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/><path stroke-linecap="round" stroke-linejoin="round" d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.102 1.101"/></svg>
+          Quick Links
+        </button>
+
+        <div class="nav-section-label" style="margin-top:8px">Knowledge Base</div>
+        <button class="nav-item" onclick="showPage('kb')">
+          <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          KB Resource Hub
+          <span style="margin-left:auto; background:var(--accent-soft); color:var(--accent); font-size:10px; font-weight:700; padding:1px 6px; border-radius:100px">26</span>
+        </button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="status-online">
+          <div class="status-dot"></div>
+          Rafal Sadowski
+        </div>
+      </div>
+    </nav>
+
+    <!-- ─── MAIN ─── -->
+    <main class="main" id="main-content">
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger btn btn-ghost btn-icon" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div>
+            <div class="topbar-title" id="pageTitle">Chat Support</div>
+            <div class="topbar-sub" id="pageSubtitle">Open / End chat session tools</div>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle dark mode">🌙</button>
+          <button class="btn btn-ghost btn-sm" onclick="window.print()">🖨 Print</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PAGE: CHAT SUPPORT
+      ══════════════════════════════════════════ -->
+      <div class="page active" id="page-chat">
+
+        <!-- Open Chat Card -->
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--accent-soft)">💬</div>
+            Open Chat Session
+          </div>
+
+          <form id="chatForm" novalidate>
+            <div class="form-group">
+              <label for="agentName">Support Agent Name</label>
+              <input type="text" class="form-control" id="agentName" list="agentNames" required aria-required="true" placeholder="Enter your name">
+              <datalist id="agentNames">
+                <option value="Rafal">
+              </datalist>
+            </div>
+
+            <div class="entry-grid" style="gap:14px">
+              <div class="form-group" style="margin:0">
+                <label for="contactName">Contact Name</label>
+                <input class="form-control" type="text" id="contactName" placeholder="Customer full name" pattern="[A-Za-z ]+" title="Letters and spaces only" required aria-required="true">
+              </div>
+              <div class="form-group" style="margin:0">
+                <label for="srNumber">Case Number</label>
+                <input class="form-control" type="text" id="srNumber" placeholder="SR / Case number" pattern="\d+" title="Numbers only" required aria-required="true">
+              </div>
+              <div class="form-group" style="margin:0">
+                <label for="custPhone">Primary Phone</label>
+                <div class="input-group">
+                  <span class="input-group-text">+</span>
+                  <input class="form-control" type="text" id="custPhone" placeholder="No spaces or dashes" pattern="\d+" required aria-required="true">
+                </div>
+              </div>
+              <div class="form-group" style="margin:0">
+                <label for="custEmail">Customer Email</label>
+                <input class="form-control" type="email" id="custEmail" placeholder="customer@company.com" required aria-required="true">
+              </div>
+            </div>
+
+            <div style="margin-top:18px">
+              <button type="submit" class="btn btn-primary btn-lg btn-block">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                Open Chat — Copy to Clipboard
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Quick Message Buttons -->
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--green-soft)">⚡</div>
+            Quick Messages
+            <button class="btn btn-amber btn-sm" style="margin-left:auto" onclick="openModal()">✏️ Edit</button>
+          </div>
+
+          <div class="quick-grid" id="quickBtnGrid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- End Chat -->
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--red-soft)">🔚</div>
+            End Chat Session
+          </div>
+          <button class="btn btn-danger btn-block btn-lg" onclick="copyEndChat()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            End Chat — Copy to Clipboard
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PAGE: NAMING TOOL
+      ══════════════════════════════════════════ -->
+      <div class="page" id="page-naming">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--purple-soft)">🏷️</div>
+            Naming Tool — PowerStore
+          </div>
+
+          <form id="namingForm" novalidate>
+            <div class="entry-grid" style="gap:14px">
+              <div class="form-group" style="margin:0">
+                <label for="ntCase">Case / SR Number</label>
+                <input class="form-control" type="text" id="ntCase" placeholder="Enter case number" inputmode="numeric" pattern="\d+" required aria-required="true">
+              </div>
+              <div class="form-group" style="margin:0">
+                <label for="ntPriority">Priority</label>
+                <select class="form-control" id="ntPriority" required>
+                  <option value="S3">S3 — Low</option>
+                  <option value="S2">S2 — Medium</option>
+                  <option value="S1">S1 — Critical</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin:0">
+                <label for="ntCountry">Country</label>
+                <select class="form-control" id="ntCountry" required aria-required="true">
+                  <option value="" disabled selected>— Select Country —</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin:0">
+                <label for="ntProduct">Product</label>
+                <select class="form-control" id="ntProduct" required>
+                  <option value="PWST500T">PowerStore 500T</option>
+                  <option value="PWST1000T">PowerStore 1000T</option>
+                  <option value="PWST1200T">PowerStore 1200T</option>
+                  <option value="PWST3000T">PowerStore 3000T</option>
+                  <option value="PWST3200T">PowerStore 3200T</option>
+                  <option value="PWST5000T">PowerStore 5000T</option>
+                  <option value="PWST5200T">PowerStore 5200T</option>
+                  <option value="PWST7000T">PowerStore 7000T</option>
+                  <option value="PWST9000T">PowerStore 9000T</option>
+                  <option value="PWST9200T">PowerStore 9200T</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin:0; grid-column:1/-1">
+                <label for="ntFault">Reported Issue / Fault</label>
+                <input class="form-control" type="text" id="ntFault" placeholder="Enter issue or faulty component" required aria-required="true">
+              </div>
+            </div>
+
+            <!-- Live preview -->
+            <div class="naming-preview" id="namingPreview" aria-live="polite">
+              <span class="part">Fill the form to generate naming string…</span>
+            </div>
+
+            <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap">
+              <button type="submit" class="btn btn-success btn-lg" style="flex:1">
+                📋 Copy Naming String
+              </button>
+              <button type="button" class="btn btn-ghost" onclick="resetNaming()">Reset</button>
+            </div>
+            <div id="namingMsg" style="margin-top:8px; font-size:12.5px" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PAGE: HANDOVER EMAIL
+      ══════════════════════════════════════════ -->
+      <div class="page" id="page-handover">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--amber-soft)">📧</div>
+            Handover Email Template
+          </div>
+
+          <div class="form-group">
+            <label for="hoMessage">Select Message Type</label>
+            <select class="form-control" id="hoMessage">
+              <option value="I will be out of the office till Sunday. If anyone has the capacity to assist with one of my cases in my absence, I would greatly appreciate it. Thank you very much.">OOO — Out of Office</option>
+              <option value="I will be on holiday from next week. If anyone has the capacity to assist with any of my cases during this time, I would greatly appreciate it. Thank you very much.">Holiday</option>
+            </select>
+          </div>
+
+          <div id="hoEntries"></div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px">
+            <button class="btn btn-success" onclick="addHoEntry()">+ Add Case</button>
+            <button class="btn btn-primary" onclick="sendHandover()">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              Send Email
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PAGE: CODE RED
+      ══════════════════════════════════════════ -->
+      <div class="page" id="page-codered">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--red-soft)">⚠️</div>
+            CODE RED Template
+          </div>
+
+          <div class="cr-warning-banner">
+            ⛔ DO NOT CHANGE OR ADJUST ANY FIELDS IN THIS TEMPLATE
+          </div>
+
+          <!-- Microcode -->
+          <div class="cr-section-header">REQUIRED FIELDS</div>
+          <div class="form-group">
+            <label>Array Microcode Level</label>
+            <div class="input-group">
+              <span class="input-group-text">[</span>
+              <input class="form-control" type="text" id="crMicrocode" placeholder="Enter microcode version">
+              <span class="input-group-text" style="border-left:none; border-radius:0 var(--radius-sm) var(--radius-sm) 0">]</span>
+            </div>
+          </div>
+
+          <!-- Event types -->
+          <div class="form-group">
+            <label style="color:var(--red)">&#123;**&#125; DU/DL/DRU/SRE — Select at least one</label>
+            <div class="check-group">
+              <div class="check-item">
+                <input type="checkbox" id="crDU">
+                <label for="crDU">Data Unavailable (DU)</label>
+              </div>
+              <div class="check-item">
+                <input type="checkbox" id="crDL">
+                <label for="crDL">Data Loss (DL)</label>
+              </div>
+              <div class="check-item">
+                <input type="checkbox" id="crDRU">
+                <label for="crDRU">Data Replication Unavailable (DRU)</label>
+              </div>
+              <div class="check-item">
+                <input type="checkbox" id="crSRE">
+                <label for="crSRE">Service Reliability Event / Performance / Political (SRE)</label>
+              </div>
+            </div>
+            <div id="crErrEvents" class="form-hint" style="color:var(--red); display:none">⚠️ Select at least one option.</div>
+          </div>
+
+          <!-- DU Hours -->
+          <div class="form-group">
+            <label>DU Hours (digits and periods only — leave blank if none)</label>
+            <div class="input-group">
+              <span class="input-group-text">[</span>
+              <input class="form-control" type="text" id="crDUHours" placeholder="e.g. 2 or 2.5" inputmode="decimal">
+              <span class="input-group-text" style="border-left:none; border-radius:0 var(--radius-sm) var(--radius-sm) 0">]</span>
+            </div>
+            <div id="crErrDU" class="form-hint" style="color:var(--red); display:none">⚠️ Only digits and periods allowed.</div>
+          </div>
+
+          <!-- Customer Temp -->
+          <div class="form-group">
+            <label style="color:var(--red)">&#123;**&#125; Customer Temp — Select one</label>
+            <div class="check-group" style="flex-direction:row; flex-wrap:wrap">
+              <div class="check-item" style="flex:1; min-width:100px">
+                <input type="checkbox" id="crHot" name="crTemp">
+                <label for="crHot">🔴 Hot</label>
+              </div>
+              <div class="check-item" style="flex:1; min-width:100px">
+                <input type="checkbox" id="crWarm" name="crTemp">
+                <label for="crWarm">🟠 Warm</label>
+              </div>
+              <div class="check-item" style="flex:1; min-width:100px">
+                <input type="checkbox" id="crCool" name="crTemp">
+                <label for="crCool">🔵 Cool</label>
+              </div>
+            </div>
+            <div id="crErrTemp" class="form-hint" style="color:var(--red); display:none">⚠️ Select at most one option.</div>
+          </div>
+
+          <!-- JIRA -->
+          <div class="form-group">
+            <label>JIRA Number (if applicable)</label>
+            <div class="input-group">
+              <span class="input-group-text">[</span>
+              <input class="form-control" type="text" id="crJira" placeholder="e.g. 123456">
+              <span class="input-group-text" style="border-left:none; border-radius:0 var(--radius-sm) var(--radius-sm) 0">]</span>
+            </div>
+          </div>
+
+          <!-- First & Final -->
+          <div class="form-group">
+            <label>First and Final</label>
+            <div class="check-item" style="display:inline-flex">
+              <input type="checkbox" id="crFirstFinal">
+              <label for="crFirstFinal">Mark as First and Final</label>
+            </div>
+          </div>
+
+          <div class="cr-section-header">NARRATIVE FIELDS</div>
+
+          <div class="form-group">
+            <label style="color:var(--red)">&#123;**&#125; Problem Description (~35 words)</label>
+            <textarea class="form-control" id="crProblem" rows="3" placeholder="Describe the problem concisely…"></textarea>
+            <div class="word-counter" id="crProblemCt">0 / 35 words</div>
+          </div>
+
+          <div class="form-group">
+            <label style="color:var(--red)">&#123;**&#125; Business Impact (~35 words)</label>
+            <textarea class="form-control" id="crImpact" rows="3" placeholder="Describe the business impact…"></textarea>
+            <div class="word-counter" id="crImpactCt">0 / 35 words</div>
+          </div>
+
+          <div class="form-group">
+            <label style="color:var(--red)">&#123;**&#125; Technical Status</label>
+            <textarea class="form-control" id="crStatus" rows="3" placeholder="Current technical status…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label style="color:var(--red)">&#123;**&#125; Next Action</label>
+            <textarea class="form-control" id="crNext" rows="3" placeholder="Next steps to be taken…"></textarea>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; align-items:center">
+            <button class="btn btn-primary" onclick="copyCR()">📋 Copy to Clipboard</button>
+            <button class="btn btn-ghost" onclick="clearCR()">🗑️ Clear All</button>
+            <span id="crStatusMsg" style="font-size:12.5px" aria-live="polite"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PAGE: WORLD CLOCK
+      ══════════════════════════════════════════ -->
+      <div class="page" id="page-clock">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--accent-soft)">🌍</div>
+            World Time Converter
+          </div>
+
+          <div class="entry-grid" style="gap:12px; margin-bottom:16px">
+            <div class="form-group" style="margin:0">
+              <label for="wcDate">Date</label>
+              <input class="form-control" type="date" id="wcDate">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label for="wcTime">Time</label>
+              <input class="form-control" type="time" id="wcTime" value="12:00">
+            </div>
+            <div class="form-group" style="margin:0; grid-column:1/-1">
+              <label for="wcSource">Source Location (interpret time as)</label>
+              <select class="form-control" id="wcSource">
+                <option value="">Use current time</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="position:relative">
+            <label for="wcSearch">Search & Add Clock</label>
+            <input class="form-control" type="text" id="wcSearch" placeholder="Country, city, abbreviation (IST, CET…) or UTC offset…" autocomplete="off">
+            <div class="search-dropdown" id="wcResults" style="display:none"></div>
+          </div>
+
+          <button class="btn btn-success btn-block" onclick="addClock()">+ Add Clock</button>
+        </div>
+
+        <!-- Clocks display -->
+        <div class="clocks-scroll" id="wcClockList" style="margin-top:20px"></div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PAGE: POST CODES
+      ══════════════════════════════════════════ -->
+      <div class="page" id="page-postcode">
+
+        <!-- Saudi Arabia -->
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--green-soft)">🇸🇦</div>
+            Saudi Arabia — Service Coverage
+          </div>
+          <div class="table-wrap">
+            <table class="sa-table">
+              <thead>
+                <tr>
+                  <th>City</th><th class="tc">Code</th><th class="tc">PUDO</th>
+                  <th class="tc">2HR</th><th class="tc">4HR</th><th class="tc">8HR</th>
+                  <th class="tc">ACS</th><th class="tc">DAQ</th><th class="tc">Hasoub</th><th class="tc">HIL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Riyadh Metropolitan</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="1001" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">RIYADH</td><td class="tc no">NO</td><td class="tc yes">YES</td><td class="tc no">NO</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc yes">Y</td></tr>
+                <tr><td>Dhahran Metropolitan</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="2001" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">DHAHRAN</td><td class="tc no">NO</td><td class="tc yes">YES</td><td class="tc no">NO</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc yes">Y</td></tr>
+                <tr><td>Jeddah Metropolitan</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="3001" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">JEDDAH</td><td class="tc no">NO</td><td class="tc yes">YES</td><td class="tc no">NO</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc yes">Y</td></tr>
+                <tr><td>Tabuk</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="4000" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">TABUK</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc no">N</td><td class="tc no">N</td></tr>
+                <tr><td>Hail</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="5001" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">HAIL</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc no">N</td><td class="tc no">N</td></tr>
+                <tr><td>Abha</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="6001" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">ABHA</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc no">N</td><td class="tc no">N</td></tr>
+                <tr><td>Yanbu</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="7001" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">YANBU</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc yes">YES</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc no">N</td></tr>
+                <tr><td>Jubail (NBD)</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="8000" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">JUBAIL</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc no">NO</td><td class="tc yes">Y</td><td class="tc yes">Y</td><td class="tc no">N</td><td class="tc no">N</td></tr>
+                <tr><td>Jubail (4hr)</td><td class="tc"><div class="copy-wrapper"><input type="text" class="form-control" value="2999" style="width:60px;padding:6px;text-align:center"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td class="tc">JUBAIL</td><td class="tc no">NO</td><td class="tc yes">YES</td><td class="tc no">NO</td><td class="tc yes">Y</td><td class="tc">—</td><td class="tc">—</td><td class="tc">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- EMEA Countries -->
+        <div class="card" style="margin-top:20px">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--accent-soft)">🌍</div>
+            EMEA Countries
+          </div>
+
+          <div class="table-filters">
+            <button class="btn btn-ghost btn-sm" onclick="filterEMEA('all')">All</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterEMEA('africa')">Africa</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterEMEA('me')">Middle East</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterEMEA('eu')">Europe</button>
+            <input class="filter-input" id="ctryFilter" placeholder="🔍 Country" oninput="filterCountry(this.value)">
+            <input class="filter-input" id="isoFilter" placeholder="🔍 ISO" oninput="filterISO(this.value)">
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Country</th><th class="tc">Ctry</th><th class="tc">ISO</th><th class="tc">WUD</th>
+                  <th class="tc">DLP</th><th>Postcode</th><th>Week</th><th>Local</th>
+                  <th class="tc">COT</th><th class="tc">GMT S</th><th class="tc">GMT W</th><th class="tc">Dial</th>
+                </tr>
+              </thead>
+              <tbody id="emeaBody">
+                <tr class="region-row" onclick="toggleRegion('africa')" data-region-header="africa"><td colspan="12">🌍 Africa <span id="icon-africa">▼</span></td></tr>
+                <tr data-region="africa"><td>Algeria</td><td class="tc">27</td><td class="tc">DZ</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="5 digit" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT-1</td><td class="tc">5PM</td><td class="tc">5:30</td><td class="tc">4:30</td><td class="tc">+213</td></tr>
+                <tr data-region="africa"><td>Angola</td><td class="tc">27</td><td class="tc">AO</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT</td><td class="tc">4PM</td><td class="tc">4PM</td><td class="tc">3PM</td><td class="tc">+244</td></tr>
+                <tr data-region="africa"><td>Botswana</td><td class="tc">27</td><td class="tc">BW</td><td class="tc wud">WUD</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="101–121" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+1</td><td class="tc">16:30</td><td class="tc">3PM</td><td class="tc">2PM</td><td class="tc">+267</td></tr>
+                <tr data-region="africa"><td>Egypt</td><td class="tc">27</td><td class="tc">EG</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="12411" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+1</td><td class="tc">4PM</td><td class="tc">3PM</td><td class="tc">2PM</td><td class="tc">+20</td></tr>
+                <tr data-region="africa"><td>Ethiopia</td><td class="tc">27</td><td class="tc">ET</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="101" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">5PM</td><td class="tc">2PM</td><td class="tc">1PM</td><td class="tc">+251</td></tr>
+                <tr data-region="africa"><td>Ghana</td><td class="tc">27</td><td class="tc">GH</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100–136" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT</td><td class="tc">4:30</td><td class="tc">5:30</td><td class="tc">4:30</td><td class="tc">+233</td></tr>
+                <tr data-region="africa"><td>Ivory Coast</td><td class="tc">27</td><td class="tc">CI</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="225" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT</td><td class="tc">4:30</td><td class="tc">3:30</td><td class="tc">4:30</td><td class="tc">+225</td></tr>
+                <tr data-region="africa"><td>Kenya</td><td class="tc">27</td><td class="tc">KE</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="1000" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">1PM</td><td class="tc">+254</td></tr>
+                <tr data-region="africa"><td>Morocco</td><td class="tc">27</td><td class="tc">MA</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="All" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT-1</td><td class="tc">5PM</td><td class="tc">6PM</td><td class="tc">6PM</td><td class="tc">+212</td></tr>
+                <tr data-region="africa"><td>Mozambique</td><td class="tc">27</td><td class="tc">MZ</td><td class="tc wud">WUD</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="1100" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+1</td><td class="tc">4:30</td><td class="tc">3:30</td><td class="tc">2:30</td><td class="tc">+258</td></tr>
+                <tr data-region="africa"><td>Namibia</td><td class="tc">27</td><td class="tc">NA</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">2PM</td><td class="tc">+264</td></tr>
+                <tr data-region="africa"><td>Nigeria</td><td class="tc">27</td><td class="tc">NG</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="50000+" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT</td><td class="tc">5PM</td><td class="tc">5PM</td><td class="tc">4PM</td><td class="tc">+234</td></tr>
+                <tr data-region="africa"><td>South Africa</td><td class="tc">25</td><td class="tc">ZA</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="All" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+1</td><td class="tc">4PM</td><td class="tc">3PM</td><td class="tc">2PM</td><td class="tc">+27</td></tr>
+                <tr data-region="africa"><td>Tanzania</td><td class="tc">27</td><td class="tc">TZ</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">3PM</td><td class="tc">2PM</td><td class="tc">+255</td></tr>
+                <tr data-region="africa"><td>Tunisia</td><td class="tc">27</td><td class="tc">TN</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="1000–9183" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT</td><td class="tc">4:30</td><td class="tc">4:30</td><td class="tc">3:30</td><td class="tc">+216</td></tr>
+                <tr data-region="africa"><td>Uganda</td><td class="tc">27</td><td class="tc">UG</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100–122" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+3</td><td class="tc">4PM</td><td class="tc">3PM</td><td class="tc">2PM</td><td class="tc">+256</td></tr>
+
+                <tr class="region-row" onclick="toggleRegion('me')" data-region-header="me"><td colspan="12">🌙 Middle East <span id="icon-me">▼</span></td></tr>
+                <tr data-region="me"><td>Bahrain</td><td class="tc">27</td><td class="tc">BH</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">1PM</td><td class="tc">+973</td></tr>
+                <tr data-region="me"><td>Iraq</td><td class="tc">27</td><td class="tc">IQ</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="5 digit" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">1PM</td><td class="tc">+964</td></tr>
+                <tr data-region="me"><td>Israel</td><td class="tc">30</td><td class="tc">IL</td><td class="tc no">NO</td><td>YAEL</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="All" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">2PM</td><td class="tc">+972</td></tr>
+                <tr data-region="me"><td>Jordan</td><td class="tc">27</td><td class="tc">JO</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="11195" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">1PM</td><td class="tc">+962</td></tr>
+                <tr data-region="me"><td>Kuwait</td><td class="tc">27</td><td class="tc">KW</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">1PM</td><td class="tc">+965</td></tr>
+                <tr data-region="me"><td>Oman</td><td class="tc">27</td><td class="tc">OM</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+3</td><td class="tc">5PM</td><td class="tc">1PM</td><td class="tc">12PM</td><td class="tc">+968</td></tr>
+                <tr data-region="me"><td>Qatar</td><td class="tc">27</td><td class="tc">QA</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">2PM</td><td class="tc">+974</td></tr>
+                <tr data-region="me"><td>Saudi Arabia</td><td class="tc">37</td><td class="tc">SA</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="City-based" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+2</td><td class="tc">4–5PM</td><td class="tc">3PM</td><td class="tc">2PM</td><td class="tc">+966</td></tr>
+                <tr data-region="me"><td>U.A.E.</td><td class="tc">38</td><td class="tc">AE</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="Various" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Sun–Thu</td><td>GMT+3</td><td class="tc">4PM</td><td class="tc">1PM</td><td class="tc">12PM</td><td class="tc">+971</td></tr>
+
+                <tr class="region-row" onclick="toggleRegion('eu')" data-region-header="eu"><td colspan="12">🇪🇺 Europe <span id="icon-eu">▼</span></td></tr>
+                <tr data-region="eu"><td>Belarus</td><td class="tc">27</td><td class="tc">BY</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="200001–274484" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>?</td><td>GMT+3</td><td class="tc">16:00</td><td class="tc">?</td><td class="tc">?</td><td class="tc">+375</td></tr>
+                <tr data-region="eu"><td>Bulgaria</td><td class="tc">27</td><td class="tc">BG</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="4 digit" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">5PM</td><td class="tc">3PM</td><td class="tc">3PM</td><td class="tc">+359</td></tr>
+                <tr data-region="eu"><td>Croatia</td><td class="tc">27</td><td class="tc">HR</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="00100–99999" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+1</td><td class="tc">4PM</td><td class="tc">3PM</td><td class="tc">3PM</td><td class="tc">+385</td></tr>
+                <tr data-region="eu"><td>Estonia</td><td class="tc">27</td><td class="tc">EE</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="10000–94791" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">4:30</td><td class="tc">2:30</td><td class="tc">2:30</td><td class="tc">+372</td></tr>
+                <tr data-region="eu"><td>Georgia</td><td class="tc">27</td><td class="tc">GE</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="0100–0199" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>?</td><td>GMT+3</td><td class="tc">17:00</td><td class="tc">?</td><td class="tc">?</td><td class="tc">+995</td></tr>
+                <tr data-region="eu"><td>Greece</td><td class="tc">47</td><td class="tc">GR</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="5 digit" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">3–5PM</td><td class="tc">3PM</td><td class="tc">3PM</td><td class="tc">+30</td></tr>
+                <tr data-region="eu"><td>Hungary</td><td class="tc">34</td><td class="tc">HU</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="City-specific" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+1</td><td class="tc">5PM</td><td class="tc">4PM</td><td class="tc">4PM</td><td class="tc">+36</td></tr>
+                <tr data-region="eu"><td>Iceland</td><td class="tc">27</td><td class="tc">IS</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="105/232" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT-1</td><td class="tc">5PM</td><td class="tc">—</td><td class="tc">—</td><td class="tc">+354</td></tr>
+                <tr data-region="eu"><td>Latvia</td><td class="tc">27</td><td class="tc">LV</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="1000–9999" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2:30</td><td class="tc">2:30</td><td class="tc">+371</td></tr>
+                <tr data-region="eu"><td>Lithuania</td><td class="tc">27</td><td class="tc">LT</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="00100–99999" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2:30</td><td class="tc">2:30</td><td class="tc">+370</td></tr>
+                <tr data-region="eu"><td>Poland</td><td class="tc">17</td><td class="tc">PL</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="5 digit" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+1</td><td class="tc">5PM</td><td class="tc">—</td><td class="tc">—</td><td class="tc">+48</td></tr>
+                <tr data-region="eu"><td>Portugal</td><td class="tc">23</td><td class="tc">PT</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="xxxx-xxx" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT</td><td class="tc">5PM</td><td class="tc">5PM</td><td class="tc">5PM</td><td class="tc">+351</td></tr>
+                <tr data-region="eu"><td>Romania</td><td class="tc">27</td><td class="tc">RO</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="6 digit" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">2PM</td><td class="tc">+40</td></tr>
+                <tr data-region="eu"><td>Russia</td><td class="tc">36</td><td class="tc">RU</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="Moscow/SPB" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+3</td><td class="tc">4:30</td><td class="tc">—</td><td class="tc">—</td><td class="tc">+7</td></tr>
+                <tr data-region="eu"><td>Serbia</td><td class="tc">27</td><td class="tc">RS</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="00100–99999" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+1</td><td class="tc">3:30</td><td class="tc">2:30</td><td class="tc">2:30</td><td class="tc">+381</td></tr>
+                <tr data-region="eu"><td>Slovenia</td><td class="tc">27</td><td class="tc">SI</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="Regular" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+1</td><td class="tc">5PM</td><td class="tc">4PM</td><td class="tc">4PM</td><td class="tc">+386</td></tr>
+                <tr data-region="eu"><td>Turkey</td><td class="tc">32</td><td class="tc">TR</td><td class="tc yes">YES</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="5 digit" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">4PM</td><td class="tc">2PM</td><td class="tc">2PM</td><td class="tc">+90</td></tr>
+                <tr data-region="eu"><td>Ukraine</td><td class="tc">35</td><td class="tc">UA</td><td class="tc yes">YES</td><td>DHL</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="5 digit" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>Mon–Fri</td><td>GMT+2</td><td class="tc">3:30</td><td class="tc">1:30</td><td class="tc">1:30</td><td class="tc">+380</td></tr>
+                <tr data-region="eu"><td>Uzbekistan</td><td class="tc">27</td><td class="tc">UZ</td><td class="tc no">NO</td><td>UPS</td><td><div class="copy-wrapper"><input type="text" class="form-control" value="100000–100214" style="width:80px;padding:5px;font-size:12px"><span class="copy-icon" onclick="copyInputValue(this.previousElementSibling, this)">📋</span></div></td><td>?</td><td>GMT+5</td><td class="tc">17:30</td><td class="tc">?</td><td class="tc">?</td><td class="tc">+998</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PAGE: QUICK LINKS
+      ══════════════════════════════════════════ -->
+      <div class="page" id="page-links">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon" style="background:var(--purple-soft)">🔗</div>
+            Quick Links
+          </div>
+          <div class="links-bar" id="linksBar">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           PAGE: KB RESOURCE HUB
+      ══════════════════════════════════════════ -->
+      <div class="page" id="page-kb">
+
+        <!-- KB Toolbar -->
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:18px">
+          <div style="display:flex; gap:8px; flex-wrap:wrap" id="kbFilterChips">
+            <button class="kb-filter-chip active" data-filter="all" onclick="kbFilter(this,'all')">All</button>
+            <button class="kb-filter-chip" data-filter="labAccess"       onclick="kbFilter(this,'labAccess')">🔧 Lab &amp; Access</button>
+            <button class="kb-filter-chip" data-filter="documentation"   onclick="kbFilter(this,'documentation')">📚 Documentation</button>
+            <button class="kb-filter-chip" data-filter="security"        onclick="kbFilter(this,'security')">🔐 Security</button>
+            <button class="kb-filter-chip" data-filter="troubleshooting" onclick="kbFilter(this,'troubleshooting')">🔍 Troubleshooting</button>
+            <button class="kb-filter-chip" data-filter="features"        onclick="kbFilter(this,'features')">⚡ Features</button>
+            <button class="kb-filter-chip" data-filter="support"         onclick="kbFilter(this,'support')">🆘 Support</button>
+          </div>
+          <div style="display:flex; gap:8px; flex-shrink:0">
+            <button class="btn btn-ghost btn-sm" onclick="kbOpenManage()">⚙️ Categories</button>
+            <button class="btn btn-primary btn-sm" onclick="kbOpenAdd()">+ Add Link</button>
+          </div>
+        </div>
+
+        <!-- KB Search -->
+        <div class="kb-search-wrap">
+          <span class="kb-search-icon">🔍</span>
+          <input type="search" id="kbSearchInput" placeholder="Search resources by title or URL… (⌘K)" autocomplete="off" spellcheck="false" aria-label="Search KB resources">
+          <button class="kb-search-clear" id="kbSearchClear" onclick="kbClearSearch()" aria-label="Clear search">✕</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="kb-stats" id="kbStats">
+          <div class="kb-stat">
+            <div class="kb-stat-label">Total Resources</div>
+            <div class="kb-stat-value" id="kbStatTotal">26</div>
+            <div class="kb-stat-icon">🔗</div>
+          </div>
+          <div class="kb-stat">
+            <div class="kb-stat-label">Categories</div>
+            <div class="kb-stat-value" id="kbStatCats">6</div>
+            <div class="kb-stat-icon">📂</div>
+          </div>
+          <div class="kb-stat">
+            <div class="kb-stat-label">Custom Links</div>
+            <div class="kb-stat-value" id="kbStatCustom">0</div>
+            <div class="kb-stat-icon">✨</div>
+          </div>
+          <div class="kb-stat">
+            <div class="kb-stat-label">Last Updated</div>
+            <div class="kb-stat-value" style="font-size:15px; padding-top:4px" id="kbStatDate">—</div>
+            <div class="kb-stat-icon">📅</div>
+          </div>
+        </div>
+
+        <!-- No results -->
+        <div class="kb-no-results" id="kbNoResults">
+          <div class="kb-no-results-icon">🔎</div>
+          <h3>No resources found</h3>
+          <p style="font-size:13px">Try a different search term or add a new link.</p>
+        </div>
+
+        <!-- KB Sections — populated by JS -->
+        <div id="kbSectionsContainer"></div>
+        <div id="kbUserSectionsContainer"></div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ─── KB: ADD LINK MODAL ─── -->
+  <div class="kb-modal-overlay" id="kbAddModal" role="dialog" aria-modal="true" aria-labelledby="kbAddModalTitle">
+    <div class="kb-modal-box">
+      <div class="kb-modal-head">
+        <h2 id="kbAddModalTitle">Add New KB Link</h2>
+        <button class="kb-modal-close" onclick="kbCloseModal('kbAddModal')" aria-label="Close">✕</button>
+      </div>
+      <div class="kb-modal-body">
+        <div class="form-group">
+          <label>Title *</label>
+          <input class="form-control" type="text" id="kbNewTitle" placeholder="e.g. PowerStore CLI Reference" autocomplete="off">
+          <div id="kbNewTitleErr" style="font-size:11.5px; color:var(--red); margin-top:4px; display:none">Title is required</div>
+        </div>
+        <div class="form-group">
+          <label>URL *</label>
+          <input class="form-control" type="text" id="kbNewUrl" placeholder="https://…" autocomplete="off">
+          <div id="kbNewUrlErr" style="font-size:11.5px; color:var(--red); margin-top:4px; display:none">Enter a valid URL starting with https:// or http://</div>
+        </div>
+        <div class="entry-grid" style="gap:12px">
+          <div class="form-group" style="margin:0">
+            <label>Category *</label>
+            <select class="form-control" id="kbNewCat">
+              <option value="">Select…</option>
+            </select>
+            <div id="kbNewCatErr" style="font-size:11.5px; color:var(--red); margin-top:4px; display:none">Please select a category</div>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Icon (emoji)</label>
+            <input class="form-control" type="text" id="kbNewIcon" placeholder="🔗" maxlength="2" autocomplete="off">
+          </div>
+        </div>
+      </div>
+      <div class="kb-modal-foot">
+        <button class="btn btn-ghost btn-sm" onclick="kbCloseModal('kbAddModal')">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="kbSubmitAdd()">Add Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── KB: MANAGE CATEGORIES MODAL ─── -->
+  <div class="kb-modal-overlay" id="kbManageModal" role="dialog" aria-modal="true" aria-labelledby="kbManageModalTitle">
+    <div class="kb-modal-box">
+      <div class="kb-modal-head">
+        <h2 id="kbManageModalTitle">Manage Categories</h2>
+        <button class="kb-modal-close" onclick="kbCloseModal('kbManageModal')" aria-label="Close">✕</button>
+      </div>
+      <div class="kb-modal-body">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); margin-bottom:10px">All Categories</div>
+        <div class="kb-cat-list" id="kbCatList"></div>
+
+        <div class="kb-backup-box">
+          <h4>Backup &amp; Restore</h4>
+          <p>Export your custom links and categories as JSON, or import a previous backup.</p>
+          <div class="kb-backup-actions">
+            <button class="btn btn-ghost btn-sm" onclick="kbExport()">⬇️ Export</button>
+            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('kbImportFile').click()">⬆️ Import</button>
+            <input type="file" id="kbImportFile" accept=".json" style="display:none" onchange="kbImport(event)">
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); margin-bottom:12px">Add New Category</div>
+        <div class="entry-grid" style="gap:12px">
+          <div class="form-group" style="margin:0">
+            <label>Name *</label>
+            <input class="form-control" type="text" id="kbNewCatName" placeholder="e.g. Firmware" autocomplete="off">
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Icon</label>
+            <input class="form-control" type="text" id="kbNewCatIcon" placeholder="📁" maxlength="2" autocomplete="off">
+          </div>
+        </div>
+      </div>
+      <div class="kb-modal-foot">
+        <button class="btn btn-ghost btn-sm" onclick="kbCloseModal('kbManageModal')">Close</button>
+        <button class="btn btn-success btn-sm" onclick="kbAddCategory()">Add Category</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       JAVASCRIPT
+  ───────────────────────────────────────────── -->
+  <script defer>
+  // ─────────────────────────────────────────────
+  // UTILITY
+  // ─────────────────────────────────────────────
+  async function copyText(text) {
+    if (navigator.clipboard?.writeText) {
+      try { await navigator.clipboard.writeText(text); return true; } catch(e) {}
+    }
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (!ok) throw new Error('Copy failed');
+    return true;
+  }
+
+  function toast(msg, icon = '✅') {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerHTML = `<span class="toast-icon">${icon}</span>${msg}`;
+    c.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('show'));
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 400);
+    }, 2800);
+  }
+
+  async function copyInputValue(inputElement, iconElement) {
+    const value = inputElement.value;
+    if (!value) return;
+    const success = await copyText(value);
+    if (success) {
+      iconElement.classList.add('copied');
+      iconElement.textContent = '✓';
+      toast('Copied to clipboard');
+      setTimeout(() => {
+        iconElement.classList.remove('copied');
+        iconElement.textContent = '📋';
+      }, 1500);
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // NAVIGATION
+  // ─────────────────────────────────────────────
+  const PAGE_META = {
+    chat:     { title: 'Chat Support',      sub: 'Open / End chat session tools' },
+    naming:   { title: 'Naming Tool',       sub: 'Generate PowerStore naming strings' },
+    handover: { title: 'Handover Email',    sub: 'Prepare and send handover emails' },
+    codered:  { title: 'Code Red Template', sub: 'Critical incident documentation' },
+    clock:    { title: 'World Clock',       sub: 'Time zone conversion tool' },
+    postcode: { title: 'Post Codes',        sub: 'EMEA service coverage reference' },
+    kb:       { title: 'KB Resource Hub',      sub: 'PowerStore knowledge base & documentation links' },
+    links:    { title: 'Quick Links',       sub: 'Fast access to internal resources' },
+  };
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const page = document.getElementById('page-' + id);
+    if (page) page.classList.add('active');
+    const navBtn = document.querySelector(`.nav-item[onclick="showPage('${id}')"]`);
+    if (navBtn) navBtn.classList.add('active');
+    const meta = PAGE_META[id] || {};
+    document.getElementById('pageTitle').textContent = meta.title || id;
+    document.getElementById('pageSubtitle').textContent = meta.sub || '';
+    closeSidebar();
+    // Update ARIA
+    document.querySelectorAll('.nav-item').forEach(n => n.removeAttribute('aria-current'));
+    if (navBtn) navBtn.setAttribute('aria-current', 'page');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ─────────────────────────────────────────────
+  // SIDEBAR MOBILE
+  // ─────────────────────────────────────────────
+  function toggleSidebar() {
+    const s = document.getElementById('sidebar');
+    const o = document.getElementById('mobileOverlay');
+    const open = s.classList.toggle('open');
+    o.classList.toggle('open', open);
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('mobileOverlay').classList.remove('open');
+  }
+
+  // ─────────────────────────────────────────────
+  // THEME
+  // ─────────────────────────────────────────────
+  function toggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  }
+  (function initTheme() {
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      const b = document.getElementById('themeBtn');
+      if (b) b.textContent = '☀️';
+    }
+  })();
+
+  // ─────────────────────────────────────────────
+  // COUNTRIES
+  // ─────────────────────────────────────────────
+  const COUNTRIES = [
+    ["AF","Afghanistan"],["AL","Albania"],["DZ","Algeria"],["AO","Angola"],["AR","Argentina"],
+    ["AU","Australia"],["AT","Austria"],["AZ","Azerbaijan"],["BH","Bahrain"],["BD","Bangladesh"],
+    ["BY","Belarus"],["BE","Belgium"],["BZ","Belize"],["BJ","Benin"],["BT","Bhutan"],
+    ["BO","Bolivia"],["BA","Bosnia and Herzegovina"],["BW","Botswana"],["BR","Brazil"],
+    ["BN","Brunei"],["BG","Bulgaria"],["BF","Burkina Faso"],["BI","Burundi"],["CV","Cabo Verde"],
+    ["KH","Cambodia"],["CM","Cameroon"],["CA","Canada"],["CF","Central African Republic"],
+    ["TD","Chad"],["CL","Chile"],["CN","China"],["CO","Colombia"],["CG","Congo"],
+    ["CD","Congo (DR)"],["CR","Costa Rica"],["CI","Côte d'Ivoire"],["HR","Croatia"],
+    ["CU","Cuba"],["CY","Cyprus"],["CZ","Czechia"],["DK","Denmark"],["DJ","Djibouti"],
+    ["DO","Dominican Republic"],["EC","Ecuador"],["EG","Egypt"],["SV","El Salvador"],
+    ["GQ","Equatorial Guinea"],["ER","Eritrea"],["EE","Estonia"],["SZ","Eswatini"],
+    ["ET","Ethiopia"],["FJ","Fiji"],["FI","Finland"],["FR","France"],["GA","Gabon"],
+    ["GM","Gambia"],["GE","Georgia"],["DE","Germany"],["GH","Ghana"],["GR","Greece"],
+    ["GL","Greenland"],["GD","Grenada"],["GT","Guatemala"],["GN","Guinea"],["GY","Guyana"],
+    ["HT","Haiti"],["HN","Honduras"],["HK","Hong Kong"],["HU","Hungary"],["IS","Iceland"],
+    ["IN","India"],["ID","Indonesia"],["IR","Iran"],["IQ","Iraq"],["IE","Ireland"],
+    ["IL","Israel"],["IT","Italy"],["JM","Jamaica"],["JP","Japan"],["JO","Jordan"],
+    ["KZ","Kazakhstan"],["KE","Kenya"],["KW","Kuwait"],["KG","Kyrgyzstan"],["LA","Laos"],
+    ["LV","Latvia"],["LB","Lebanon"],["LS","Lesotho"],["LR","Liberia"],["LY","Libya"],
+    ["LT","Lithuania"],["LU","Luxembourg"],["MG","Madagascar"],["MW","Malawi"],["MY","Malaysia"],
+    ["MV","Maldives"],["ML","Mali"],["MT","Malta"],["MR","Mauritania"],["MU","Mauritius"],
+    ["MX","Mexico"],["MD","Moldova"],["MN","Mongolia"],["ME","Montenegro"],["MA","Morocco"],
+    ["MZ","Mozambique"],["MM","Myanmar"],["NA","Namibia"],["NP","Nepal"],["NL","Netherlands"],
+    ["NZ","New Zealand"],["NI","Nicaragua"],["NE","Niger"],["NG","Nigeria"],["MK","North Macedonia"],
+    ["NO","Norway"],["OM","Oman"],["PK","Pakistan"],["PS","Palestine"],["PA","Panama"],
+    ["PG","Papua New Guinea"],["PY","Paraguay"],["PE","Peru"],["PH","Philippines"],
+    ["PL","Poland"],["PT","Portugal"],["QA","Qatar"],["RO","Romania"],["RU","Russian Federation"],
+    ["RW","Rwanda"],["SA","Saudi Arabia"],["SN","Senegal"],["RS","Serbia"],["SL","Sierra Leone"],
+    ["SG","Singapore"],["SK","Slovakia"],["SI","Slovenia"],["SO","Somalia"],["ZA","South Africa"],
+    ["SS","South Sudan"],["ES","Spain"],["LK","Sri Lanka"],["SD","Sudan"],["SE","Sweden"],
+    ["CH","Switzerland"],["SY","Syria"],["TW","Taiwan"],["TJ","Tajikistan"],["TZ","Tanzania"],
+    ["TH","Thailand"],["TL","Timor-Leste"],["TG","Togo"],["TT","Trinidad and Tobago"],
+    ["TN","Tunisia"],["TR","Turkey"],["TM","Turkmenistan"],["UG","Uganda"],["UA","Ukraine"],
+    ["AE","United Arab Emirates"],["GB","United Kingdom"],["US","United States"],
+    ["UY","Uruguay"],["UZ","Uzbekistan"],["VE","Venezuela"],["VN","Viet Nam"],
+    ["YE","Yemen"],["ZM","Zambia"],["ZW","Zimbabwe"]
+  ];
+
+  function populateCountries(selectId) {
+    const sel = document.getElementById(selectId);
+    if (!sel) return;
+    COUNTRIES.forEach(([code, name]) => {
+      const o = new Option(name, code);
+      sel.appendChild(o);
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // QUICK LINKS CONFIG
+  // ─────────────────────────────────────────────
+  const QUICK_LINKS = [
+    { label: "WallBoard", url: "https://aceyus.dell.com/aceyus6/Dash_Viewer.aspx?DashID=6107" },
+    { label: "WOA", url: "https://apps.powerapps.com/play/e/default-945c199a-83a2-4e80-9f8c-5a91be5752dd/a/6e05dcf7-30ac-47ee-8b3d-8308c16391e5?tenantId=945c199a-83a2-4e80-9f8c-5a91be5752dd" },
+    { label: "SCG", url: "https://connectivityhub.dell.com/#/home" },
+    { label: "IAOPS", url: "https://cloudiq.dell.com/tenant-gui/search" },
+    { label: "SOLV", url: "https://solve.dell.com/solve/home/PowerStore" },
+    { label: "Matrix", url: "https://www.dell.com/support/kbdoc/en-ie/000175213/powerstoreos-matrix" },
+    { label: "How-To articles", url: "https://www.dell.com/support/kbdoc/en-us/000177659" },
+    { label: "SPMD", url: "https://spmd.dell.com/Search/" },
+    { label: "SF", url: "https://dellservices.lightning.force.com/lightning/o/Case/list?filterName=My_Open_Cases_ISG" },
+    { label: "Root access", url: "https://service-key-gen.cec.delllabs.net/" },
+    { label: "Confluence", url: "https://confluence.cec.lab.emc.com/display/PSTORETS/RSE+%7C+Frontline+%7C+L1+HOME" },
+    { label: "CoPilotAI", url: "https://m365.cloud.microsoft/chat/" },
+    { label: "Performance Triage", url: "https://triage-srv.xiohpk.lab.emc.com:4200/main/performance" },
+    { label: "PWST Triage", url: "https://triage-srv.xiohpk.lab.emc.com:4200/main/powerstore/execution/psknownissuescan" },
+    { label: "Jira", url: "https://surge.isus.emc.com/surge/index-cs.php" },
+    { label: "Thunder", url: "https://thunder.dell.com/ui/" },
+    { label: "Dell Support", url: "https://www.dell.com/support" },
+    { label: "FWRulforP", url: "https://www.dell.com/support/kbdoc/en-us/000079836" },
+    { label: "OneDallWay", url: "https://iawmqy.fa.ocs.oraclecloud.com/fscmUI/faces/FuseWelcome" },
+    { label: "Payslip", url: "https://dell.employeeselfservice.net/payslips" },
+    { label: "Saba", url: "https://dell.sabacloud.com/" },
+    { label: "PWSTinfoHUB", url: "https://www.dell.com/support/kbdoc/en-ie/000130110" },
+    { label: "ServiceScript", url: "https://www.dell.com/support/manuals/en-us/powerstore-9000/pwrstr-ssg/service-commands" },
+    { label: "Percipio", url: "https://dell.percipio.com/" },
+    { label: "TAMSearch", url: "https://customersuccess.dell.com/" },
+    { label: "DellCloud", url: "https://digitalcloud.dell.com/#/home" },
+    { label: "labPWST", url: "https://ps-lab-portal.apps.supportlabs.dell/" },
+    { label: "LABvirtu", url: "http://hopcyc-s-gui-demo.cec.delllabs.net/home/" },
+    { label: "MFT FTP", url: "https://integration-developer.us.dell.com/build" },
+    { label: "Dell FTP", url: "https://tdm.dell.com/file-upload" },
+    { label: "Ask Dell", url: "https://ask.dell.com/" },
+    { label: "myprofile", url: "https://dce.dell.com/my-cos" },
+    { label: "IQ", url: "https://quality.dell.com/Home/" },
+  ];
+
+  function buildLinksBar() {
+    const bar = document.getElementById('linksBar');
+    if (!bar) return;
+    bar.innerHTML = '';
+    QUICK_LINKS.forEach(lnk => {
+      const chip = document.createElement('a');
+      chip.className = 'link-chip';
+      chip.href = lnk.url;
+      chip.target = '_blank';
+      chip.rel = 'noopener noreferrer';
+      chip.textContent = lnk.label;
+      chip.setAttribute('aria-label', `Open ${lnk.label} in new tab`);
+      bar.appendChild(chip);
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // BUTTON MESSAGES
+  // ─────────────────────────────────────────────
+  const DEFAULT_MESSAGES = {
+    countcode:  { label: 'CountCode',   msg: 'Please confirm your Country code phone number.' },
+    probdesc:   { label: 'ProbDesc',    msg: 'I see that you are getting the following error: ........ADD PROBLEM DESCRIPTION FROM CASE......... Can you please confirm?' },
+    mayi:       { label: 'MayIHelp',   msg: 'Thank you for confirmation. How may I help you today with your Dell PowerStore array?' },
+    brief:      { label: 'Brief',       msg: 'Dear Customer, I cannot see any problem description on SR, please kindly provide a brief explanation of the incident you are facing.' },
+    thanksinfo: { label: 'ThanksInfo',  msg: 'Thank you for the information. Allow me to review this error. This should take no longer than a couple of minutes, I\'ll keep you updated as soon as I have more information.' },
+    stillwork:  { label: 'StillWork',   msg: 'Still working on it — I appreciate your patience. I\'m still reviewing our KB on this alert and will provide update in next few mins.' },
+    call:       { label: 'Call',        msg: 'Thank you, for further clarification, may I kindly give you a call to discuss this matter in more detail?' },
+    zoom:       { label: 'Zoom',        msg: 'Thank you for sharing the details. Given the complexity of the issue, I believe it would be most effective to continue the conversation over Zoom so we can work through it together, I\'ll kindly send a Zoom invitation via email. Please let me know once received.' },
+    fivemin:    { label: '5 min',       msg: 'In order to provide the best support to all of our customers, I will need to disconnect this chat in five (5) minutes due to inactivity. If you would like to keep this session active, please respond within the next five (5) minutes.' },
+    beforeend:  { label: 'BeforeEnd',   msg: 'Dear Customer, before we close this session, please let me know if there is anything else I can assist you with. I\'m happy to help with any further questions.' },
+  };
+
+  function loadMessages() {
+    try {
+      const s = localStorage.getItem('btnMessages');
+      return s ? { ...DEFAULT_MESSAGES, ...JSON.parse(s) } : { ...DEFAULT_MESSAGES };
+    } catch { return { ...DEFAULT_MESSAGES }; }
+  }
+
+  function saveMessages_store(data) {
+    localStorage.setItem('btnMessages', JSON.stringify(data));
+  }
+
+  function buildQuickGrid() {
+    const grid = document.getElementById('quickBtnGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    const msgs = loadMessages();
+    Object.keys(msgs).forEach(key => {
+      const d = msgs[key];
+      const btn = document.createElement('button');
+      btn.className = 'quick-btn';
+      btn.textContent = d.label;
+      btn.setAttribute('data-key', key);
+      btn.setAttribute('data-tip', d.msg);
+      btn.setAttribute('aria-label', `Copy ${d.label} message`);
+      btn.onclick = async () => {
+        const current = loadMessages();
+        try {
+          await copyText(current[key].msg);
+          toast('Message copied!');
+        } catch { toast('Copy failed — try again', '⚠️'); }
+      };
+      grid.appendChild(btn);
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // MODAL: EDIT MESSAGES
+  // ─────────────────────────────────────────────
+  function openModal() {
+    const msgs = loadMessages();
+    const body = document.getElementById('editModalBody');
+    body.innerHTML = '';
+    Object.keys(msgs).forEach(key => {
+      const d = msgs[key];
+      const div = document.createElement('div');
+      div.className = 'msg-edit-item';
+      div.innerHTML = `<label>${d.label}</label>
+        <textarea class="form-control" data-key="${key}">${d.msg}</textarea>`;
+      body.appendChild(div);
+    });
+    document.getElementById('editModal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('editModal').classList.remove('open');
+  }
+
+  function saveMessages() {
+    const msgs = loadMessages();
+    document.querySelectorAll('#editModalBody textarea').forEach(ta => {
+      const key = ta.dataset.key;
+      if (msgs[key]) msgs[key].msg = ta.value;
+    });
+    saveMessages_store(msgs);
+    buildQuickGrid();
+    closeModal();
+    toast('Messages saved!');
+  }
+
+  function resetMessages() {
+    if (!confirm('Reset all messages to defaults?')) return;
+    saveMessages_store(DEFAULT_MESSAGES);
+    buildQuickGrid();
+    openModal();
+    toast('Reset to defaults');
+  }
+
+  // Close modal on overlay click
+  document.getElementById('editModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  // ─────────────────────────────────────────────
+  // CHAT FORM
+  // ─────────────────────────────────────────────
+  document.getElementById('chatForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name    = document.getElementById('agentName').value;
+    const contact = document.getElementById('contactName').value.trim();
+    const sr      = document.getElementById('srNumber').value.trim();
+    const phone   = document.getElementById('custPhone').value.trim();
+    const email   = document.getElementById('custEmail').value.trim();
+
+    const msg = `Thank you for contacting Dell. My name is ${name}. Thank you for reaching PowerStore Chat Support.\n\nBefore we proceed — for this chat session, your service request number is ${sr} and as per our contact details records, your name is ${contact}, your email address is ${email} and contact phone number is +${phone}.\n\nI want to ensure we have the right details, can you please confirm?`;
+
+    try {
+      await copyText(msg);
+      toast('Open chat message copied!');
+      this.reset();
+    } catch { toast('Copy failed', '⚠️'); }
+  });
+
+  async function copyEndChat() {
+    const msg = `Thank you for your time today.\n\nYou may close the chat whenever you're ready. Please note that you might receive an email survey — your feedback is greatly appreciated and helps us improve our support.\n\nYou're always welcome to contact us again for any assistance.\n\nThanks for chatting with us, and have a great day.`;
+    try {
+      await copyText(msg);
+      toast('End chat message copied!');
+    } catch { toast('Copy failed', '⚠️'); }
+  }
+
+  // ─────────────────────────────────────────────
+  // NAMING TOOL
+  // ─────────────────────────────────────────────
+  function updateNamingPreview() {
+    const cs = document.getElementById('ntCase').value.trim();
+    const pr = document.getElementById('ntPriority').value;
+    const co = document.getElementById('ntCountry').value;
+    const pd = document.getElementById('ntProduct').value;
+    const ft = document.getElementById('ntFault').value.trim();
+    const prev = document.getElementById('namingPreview');
+    if (!cs && !ft) {
+      prev.innerHTML = '<span style="color:var(--text-faint)">Fill the form to generate naming string…</span>';
+      return;
+    }
+    const fmt = (label, val) => `<span class="part">${val || '___'}</span>`;
+    prev.innerHTML = `<span class="val">${cs||'_____'}</span> <span class="part"> | </span> <span class="val">${pr}</span> <span class="part"> | </span> <span class="val">${co||'__'}</span> <span class="part"> | </span> <span class="val">${pd}</span> <span class="part"> | </span> <span class="val">${ft||'…'}</span>`;
+  }
+
+  ['ntCase','ntPriority','ntCountry','ntProduct','ntFault'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateNamingPreview);
+    if (el) el.addEventListener('change', updateNamingPreview);
+  });
+
+  document.getElementById('namingForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const cs = document.getElementById('ntCase').value.trim();
+    const pr = document.getElementById('ntPriority').value;
+    const co = document.getElementById('ntCountry').value;
+    const pd = document.getElementById('ntProduct').value;
+    const ft = document.getElementById('ntFault').value.trim();
+
+    if (!this.checkValidity()) {
+      this.reportValidity(); return;
+    }
+
+    const str = `${cs} | ${pr} | ${co} | ${pd} | ${ft}`;
+    try {
+      await copyText(str);
+      const msg = document.getElementById('namingMsg');
+      msg.textContent = '✅ Copied: ' + str;
+      msg.style.color = 'var(--green)';
+      toast('Naming string copied!');
+      this.reset();
+      updateNamingPreview();
+    } catch {
+      const msg = document.getElementById('namingMsg');
+      msg.textContent = '⚠️ Copy failed. Try manually.';
+      msg.style.color = 'var(--red)';
+    }
+  });
+
+  function resetNaming() {
+    document.getElementById('namingForm').reset();
+    document.getElementById('namingMsg').textContent = '';
+    updateNamingPreview();
+  }
+
+  // ─────────────────────────────────────────────
+  // HANDOVER EMAIL
+  // ─────────────────────────────────────────────
+  let hoCount = 0;
+
+  function addHoEntry() {
+    hoCount++;
+    const container = document.getElementById('hoEntries');
+    const div = document.createElement('div');
+    div.className = 'entry-block';
+    div.id = 'ho-entry-' + hoCount;
+    div.innerHTML = `
+      <div class="entry-head">
+        <div class="entry-label"><span class="entry-num">${hoCount}</span> Case Entry</div>
+        <button class="btn btn-danger btn-sm" onclick="removeHoEntry(${hoCount})" aria-label="Remove entry ${hoCount}">Remove</button>
+      </div>
+      <div class="form-group"><label>Case Number *</label><input class="form-control" name="caseNum" type="text" placeholder="SR / Case number" required></div>
+      <div class="form-group"><label>Issue Description *</label><textarea class="form-control" name="issue" placeholder="Brief issue description, symptoms, troubleshooting done…" required></textarea></div>
+      <div class="entry-grid" style="gap:12px">
+        <div class="form-group" style="margin:0"><label>Log Files</label><input class="form-control" name="logs" placeholder="Log file references or links…"></div>
+        <div class="form-group" style="margin:0"><label>Knowledge Base</label><input class="form-control" name="kbs" placeholder="KB article references…"></div>
+      </div>
+      <div class="form-group"><label>Next Step *</label><input class="form-control" name="nextStep" placeholder="Next call, zoom session, dispatch…" required></div>
+    `;
+    container.appendChild(div);
+  }
+
+  function removeHoEntry(id) {
+    const el = document.getElementById('ho-entry-' + id);
+    if (el) el.remove();
+  }
+
+  function sendHandover() {
+    const message = document.getElementById('hoMessage').value;
+    const entries = document.querySelectorAll('#hoEntries .entry-block');
+    if (!entries.length) { toast('Add at least one case entry', '⚠️'); return; }
+
+    let body = `Hello Team,\n\n${message}\n\n`;
+    let valid = true;
+
+    entries.forEach((entry, i) => {
+      const caseNum  = entry.querySelector('[name="caseNum"]').value.trim();
+      const issue    = entry.querySelector('[name="issue"]').value.trim();
+      const logs     = entry.querySelector('[name="logs"]').value.trim();
+      const kbs      = entry.querySelector('[name="kbs"]').value.trim();
+      const nextStep = entry.querySelector('[name="nextStep"]').value.trim();
+      if (!caseNum || !issue || !nextStep) { valid = false; return; }
+      if (i > 0) body += '\n';
+      body += `Case: ${caseNum}\nIssue: ${issue}\n`;
+      if (logs) body += `Logs: ${logs}\n`;
+      if (kbs) body += `KBs: ${kbs}\n`;
+      body += `Next Step: ${nextStep}.\n`;
+    });
+
+    if (!valid) { toast('Fill all required fields in each entry', '⚠️'); return; }
+
+    const to  = 'isg.emea.mr.pst.renatadirects@dell.com;ISG.PowerStore.EMEA.FLPrime@dell.com';
+    const cc  = 'renata.wolniewicz@dell.com;sebastien.trichard@dell.com;Yannick.Roux@dell.com';
+    const link = `mailto:${to}?subject=Handover request details&cc=${encodeURIComponent(cc)}&body=${encodeURIComponent(body)}`;
+    window.location.href = link;
+  }
+
+  // ─────────────────────────────────────────────
+  // CODE RED
+  // ─────────────────────────────────────────────
+  function wordCount(id, ctId, limit = 35) {
+    const ta = document.getElementById(id);
+    const ct = document.getElementById(ctId);
+    if (!ta || !ct) return;
+    ta.addEventListener('input', () => {
+      const w = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+      ct.textContent = `${w} / ${limit} words`;
+      ct.className = 'word-counter' + (w > limit ? ' over' : w >= limit * .8 ? ' warn' : '');
+    });
+  }
+  wordCount('crProblem', 'crProblemCt');
+  wordCount('crImpact', 'crImpactCt');
+
+  // Enforce single temp selection
+  ['crHot','crWarm','crCool'].forEach(id => {
+    document.getElementById(id).addEventListener('change', function() {
+      if (this.checked) {
+        ['crHot','crWarm','crCool'].filter(x => x !== id).forEach(x => document.getElementById(x).checked = false);
+      }
+    });
+  });
+
+  function crValidate() {
+    let ok = true;
+    const du = document.getElementById('crDU').checked;
+    const dl = document.getElementById('crDL').checked;
+    const dru = document.getElementById('crDRU').checked;
+    const sre = document.getElementById('crSRE').checked;
+    const eErr = document.getElementById('crErrEvents');
+    if (!(du || dl || dru || sre)) { eErr.style.display = 'block'; ok = false; } else eErr.style.display = 'none';
+
+    const tempCount = ['crHot','crWarm','crCool'].filter(id => document.getElementById(id).checked).length;
+    const tErr = document.getElementById('crErrTemp');
+    if (tempCount > 1) { tErr.style.display = 'block'; ok = false; } else tErr.style.display = 'none';
+
+    const duH = document.getElementById('crDUHours').value.trim();
+    const duErr = document.getElementById('crErrDU');
+    if (duH && !/^[0-9.]+$/.test(duH)) { duErr.style.display = 'block'; ok = false; } else duErr.style.display = 'none';
+
+    return ok;
+  }
+
+  function bx(val) { return val ? '[ x ]' : '[   ]'; }
+
+  function buildCRText() {
+    const v = id => document.getElementById(id).value.trim();
+    const c = id => document.getElementById(id).checked;
+    const temp = ['Hot','Warm','Cool'].map((t,i) => `${bx(c(['crHot','crWarm','crCool'][i]))} ${t}`).join('\n');
+
+    return [
+      'CODE RED TEMPLATE — CODE RED TEMPLATE — CUSTOMER ALERT',
+      'DO NOT CHANGE OR ADJUST ANY FIELDS IN THIS TEMPLATE',
+      '',
+      '*** REQUIRED FIELDS ***',
+      '─────────────────────────────────',
+      'Array Microcode Level:',
+      `[ ${v('crMicrocode')} ]`,
+      '',
+      '{**} DU/DL/DRU/SRE (select all applicable):',
+      `${bx(c('crDU'))} Data Unavailable (DU)`,
+      `${bx(c('crDL'))} Data Loss (DL)`,
+      `${bx(c('crDRU'))} Data Replication Unavailable (DRU)`,
+      `${bx(c('crSRE'))} Service Reliability Event / Performance / Political (SRE)`,
+      '',
+      'DU Hours:',
+      `[ ${v('crDUHours')} ]`,
+      '',
+      '{**} Customer Temp:',
+      temp,
+      '',
+      'JIRA Number:',
+      `[ ${v('crJira')} ]`,
+      '',
+      'First and Final:',
+      bx(c('crFirstFinal')),
+      '─────────────────────────────────',
+      '',
+      '{**} Problem Description (~35 words):',
+      v('crProblem'),
+      '',
+      '{**} Business Impact (~35 words):',
+      v('crImpact'),
+      '',
+      '{**} Technical Status:',
+      v('crStatus'),
+      '',
+      '{**} Next Action:',
+      v('crNext'),
+    ].join('\n');
+  }
+
+  async function copyCR() {
+    if (!crValidate()) {
+      const s = document.getElementById('crStatusMsg');
+      s.textContent = '⚠️ Fix validation errors first.';
+      s.style.color = 'var(--red)';
+      return;
+    }
+    try {
+      await copyText(buildCRText());
+      const s = document.getElementById('crStatusMsg');
+      s.textContent = '✅ Copied!';
+      s.style.color = 'var(--green)';
+      toast('Code Red template copied!');
+    } catch { toast('Copy failed', '⚠️'); }
+  }
+
+  function clearCR() {
+    document.querySelectorAll('#page-codered input[type="text"], #page-codered textarea').forEach(el => el.value = '');
+    document.querySelectorAll('#page-codered input[type="checkbox"]').forEach(el => el.checked = false);
+    document.querySelectorAll('#page-codered .word-counter').forEach(el => { el.textContent = '0 / 35 words'; el.className = 'word-counter'; });
+    ['crErrEvents','crErrDU','crErrTemp'].forEach(id => document.getElementById(id).style.display = 'none');
+    const s = document.getElementById('crStatusMsg');
+    s.textContent = '🗑️ Cleared'; s.style.color = 'var(--text-muted)';
+    toast('All fields cleared');
+  }
+
+  // ─────────────────────────────────────────────
+  // WORLD CLOCK
+  // ─────────────────────────────────────────────
+  const TZ_DB = [
+    { zone: "Europe/Dublin", country: "Ireland", city: "Dublin", abbr: "IST" },
+    { zone: "Europe/London", country: "United Kingdom", city: "London", abbr: "GMT/BST" },
+    { zone: "Europe/Paris", country: "France", city: "Paris", abbr: "CET" },
+    { zone: "Europe/Berlin", country: "Germany", city: "Berlin", abbr: "CET" },
+    { zone: "Europe/Rome", country: "Italy", city: "Rome", abbr: "CET" },
+    { zone: "Europe/Madrid", country: "Spain", city: "Madrid", abbr: "CET" },
+    { zone: "Europe/Helsinki", country: "Finland", city: "Helsinki", abbr: "EET" },
+    { zone: "Europe/Athens", country: "Greece", city: "Athens", abbr: "EET" },
+    { zone: "Asia/Jerusalem", country: "Israel", city: "Jerusalem", abbr: "IST" },
+    { zone: "Africa/Cairo", country: "Egypt", city: "Cairo", abbr: "EET" },
+    { zone: "Europe/Kyiv", country: "Ukraine", city: "Kyiv", abbr: "EET" },
+    { zone: "Europe/Warsaw", country: "Poland", city: "Warsaw", abbr: "CET" },
+    { zone: "America/New_York", country: "United States", city: "New York", abbr: "EST/EDT" },
+    { zone: "America/Chicago", country: "United States", city: "Chicago", abbr: "CST" },
+    { zone: "America/Los_Angeles", country: "United States", city: "Los Angeles", abbr: "PST" },
+    { zone: "Asia/Tokyo", country: "Japan", city: "Tokyo", abbr: "JST" },
+    { zone: "Asia/Kolkata", country: "India", city: "Kolkata", abbr: "IST" },
+    { zone: "Asia/Dubai", country: "United Arab Emirates", city: "Dubai", abbr: "GST" },
+    { zone: "Asia/Singapore", country: "Singapore", city: "Singapore", abbr: "SGT" },
+    { zone: "Australia/Sydney", country: "Australia", city: "Sydney", abbr: "AEST" },
+    { zone: "Pacific/Auckland", country: "New Zealand", city: "Auckland", abbr: "NZST" },
+    { zone: "Europe/Moscow", country: "Russia", city: "Moscow", abbr: "MSK" },
+    { zone: "Asia/Shanghai", country: "China", city: "Shanghai", abbr: "CST" },
+    { zone: "Asia/Seoul", country: "South Korea", city: "Seoul", abbr: "KST" },
+    { zone: "America/Toronto", country: "Canada", city: "Toronto", abbr: "EST" },
+    { zone: "America/Sao_Paulo", country: "Brazil", city: "São Paulo", abbr: "BRT" },
+    { zone: "Africa/Johannesburg", country: "South Africa", city: "Johannesburg", abbr: "SAST" },
+    { zone: "Asia/Karachi", country: "Pakistan", city: "Karachi", abbr: "PKT" },
+    { zone: "Asia/Bangkok", country: "Thailand", city: "Bangkok", abbr: "ICT" },
+    { zone: "Europe/Amsterdam", country: "Netherlands", city: "Amsterdam", abbr: "CET" },
+    { zone: "Europe/Stockholm", country: "Sweden", city: "Stockholm", abbr: "CET" },
+    { zone: "Europe/Bucharest", country: "Romania", city: "Bucharest", abbr: "EET" },
+    { zone: "Europe/Istanbul", country: "Turkey", city: "Istanbul", abbr: "TRT" },
+    { zone: "Asia/Riyadh", country: "Saudi Arabia", city: "Riyadh", abbr: "AST" },
+    { zone: "Asia/Doha", country: "Qatar", city: "Doha", abbr: "AST" },
+    { zone: "Asia/Kuwait", country: "Kuwait", city: "Kuwait City", abbr: "AST" },
+    { zone: "Africa/Nairobi", country: "Kenya", city: "Nairobi", abbr: "EAT" },
+    { zone: "Asia/Beirut", country: "Lebanon", city: "Beirut", abbr: "EET" },
+  ];
+
+  // Add UTC offsets
+  for (let off = -12; off <= 14; off += 0.5) {
+    const sign = off >= 0 ? '+' : '';
+    const h = Math.floor(Math.abs(off));
+    const m = (Math.abs(off) % 1) ? '30' : '00';
+    TZ_DB.push({ zone: `offset:${off}`, country: 'UTC', city: `UTC${sign}${h}:${m.padStart(2,'0')}`, abbr: 'UTC' });
+  }
+
+  function getTimeInfo(zone, baseDate) {
+    if (zone.startsWith('offset:')) {
+      const off = parseFloat(zone.split(':')[1]);
+      const utc = baseDate.getTime() + baseDate.getTimezoneOffset() * 60000;
+      const d = new Date(utc + off * 3600000);
+      const pad = n => String(n).padStart(2,'0');
+      return { time: `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`, offset: `UTC${off>=0?'+':''}${off}`, dst: false };
+    }
+    const f = new Intl.DateTimeFormat('en-GB', { timeZone: zone, hour:'2-digit', minute:'2-digit', second:'2-digit', timeZoneName:'short', hour12: false });
+    const parts = f.formatToParts(baseDate);
+    const g = t => parts.find(p => p.type === t)?.value || '';
+    const y = baseDate.getUTCFullYear();
+    const offNow = getMinOffset(zone, baseDate);
+    const offJan = getMinOffset(zone, new Date(Date.UTC(y,0,1)));
+    const offJul = getMinOffset(zone, new Date(Date.UTC(y,6,1)));
+    const dst = offNow !== Math.max(offJan, offJul);
+    return { time: `${g('hour')}:${g('minute')}:${g('second')}`, offset: g('timeZoneName'), dst };
+  }
+
+  function getMinOffset(zone, d) {
+    const f = new Intl.DateTimeFormat('en-US', { timeZone: zone, hour:'2-digit', minute:'2-digit', hour12: false });
+    const p = f.formatToParts(d);
+    return (+p.find(x=>x.type==='hour').value)*60 + (+p.find(x=>x.type==='minute').value);
+  }
+
+  let wcClocks = [];
+  try { wcClocks = JSON.parse(localStorage.getItem('wc-clocks') || '[]'); } catch {}
+  let wcSelected = null;
+  let wcDrag = null;
+  let wcClockTimer = null;
+
+  function wcGetLabel(zone) {
+    const e = TZ_DB.find(x => x.zone === zone);
+    if (!e) return zone;
+    return e.abbr ? `${e.city} (${e.abbr})` : e.city;
+  }
+
+  function wcUpdateSource() {
+    const sel = document.getElementById('wcSource');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Use current time</option>';
+    wcClocks.forEach(c => {
+      const o = new Option(wcGetLabel(c.zone), c.zone);
+      sel.appendChild(o);
+    });
+    if (wcClocks.some(c => c.zone === cur)) sel.value = cur;
+  }
+
+  function wcGetBaseDate() {
+    const dateStr = document.getElementById('wcDate').value;
+    const timeStr = document.getElementById('wcTime').value || '12:00';
+    const sourceZone = document.getElementById('wcSource').value;
+    if (!sourceZone) return new Date();
+    const [y,mo,d] = dateStr.split('-').map(Number);
+    const [h,mi] = timeStr.split(':').map(Number);
+    const utc = new Date(Date.UTC(y, mo-1, d, h, mi, 0));
+    const f = new Intl.DateTimeFormat('en-US', { timeZone: sourceZone, hour:'2-digit', minute:'2-digit', hour12: false });
+    const p = f.formatToParts(utc);
+    const sh = parseInt(p.find(x=>x.type==='hour').value);
+    const sm = parseInt(p.find(x=>x.type==='minute').value);
+    return new Date(utc.getTime() - ((sh*60+sm)-(h*60+mi))*60000);
+  }
+
+  function wcRender() {
+    const list = document.getElementById('wcClockList');
+    const base = wcGetBaseDate();
+    list.innerHTML = '';
+    wcClocks.forEach((c, i) => {
+      const info = getTimeInfo(c.zone, base);
+      const card = document.createElement('div');
+      card.className = 'clock-card';
+      card.draggable = true;
+      card.dataset.index = i;
+      card.innerHTML = `
+        <button class="clock-remove" onclick="wcRemove(${i})" aria-label="Remove ${wcGetLabel(c.zone)}">×</button>
+        <div class="clock-city">${wcGetLabel(c.zone)}</div>
+        <div class="clock-time" aria-label="Time: ${info.time}">${info.time}</div>
+        <div class="clock-meta">${info.offset} · DST ${info.dst ? '✅' : '❌'}</div>
+      `;
+      card.addEventListener('dragstart', () => { wcDrag = i; card.classList.add('dragging'); });
+      card.addEventListener('dragend', () => { card.classList.remove('dragging'); wcDrag = null; });
+      card.addEventListener('dragover', e => e.preventDefault());
+      card.addEventListener('drop', e => {
+        e.preventDefault();
+        if (wcDrag !== null && wcDrag !== i) {
+          wcClocks.splice(i, 0, wcClocks.splice(wcDrag, 1)[0]);
+          localStorage.setItem('wc-clocks', JSON.stringify(wcClocks));
+          wcUpdateSource(); wcRender();
+        }
+      });
+      list.appendChild(card);
+    });
+  }
+
+  function wcRemove(i) {
+    wcClocks.splice(i, 1);
+    localStorage.setItem('wc-clocks', JSON.stringify(wcClocks));
+    wcUpdateSource(); wcRender();
+  }
+
+  function addClock() {
+    if (!wcSelected) { toast('Select a timezone first', '⚠️'); return; }
+    if (wcClocks.some(c => c.zone === wcSelected.zone)) { toast('Already added', '⚠️'); return; }
+    wcClocks.push(wcSelected);
+    localStorage.setItem('wc-clocks', JSON.stringify(wcClocks));
+    wcSelected = null;
+    document.getElementById('wcSearch').value = '';
+    document.getElementById('wcResults').style.display = 'none';
+    wcUpdateSource(); wcRender();
+    toast('Clock added!');
+  }
+
+  // Search
+  document.getElementById('wcSearch').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    const res = document.getElementById('wcResults');
+    if (q.length < 1) { res.style.display = 'none'; return; }
+    const filtered = TZ_DB.filter(e =>
+      e.country.toLowerCase().includes(q) ||
+      e.city.toLowerCase().includes(q) ||
+      e.zone.toLowerCase().includes(q) ||
+      (e.abbr && e.abbr.toLowerCase().includes(q))
+    ).slice(0, 40);
+
+    if (!filtered.length) { res.innerHTML = '<div class="search-opt" style="color:var(--text-faint)">No results</div>'; res.style.display = 'block'; return; }
+    const now = new Date();
+    res.innerHTML = filtered.map(e => {
+      const t = getTimeInfo(e.zone, now).time;
+      return `<div class="search-opt" data-zone="${e.zone}">
+        <span>${e.city}${e.abbr ? ` <span style="color:var(--text-faint); font-size:11px">(${e.abbr})</span>` : ''} — ${e.country}</span>
+        <span class="search-opt-time">${t}</span>
+      </div>`;
+    }).join('');
+
+    res.querySelectorAll('.search-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const zone = opt.dataset.zone;
+        wcSelected = TZ_DB.find(e => e.zone === zone);
+        document.getElementById('wcSearch').value = wcSelected ? `${wcSelected.city}${wcSelected.abbr ? ` (${wcSelected.abbr})` : ''}` : zone;
+        res.style.display = 'none';
+      });
+    });
+    res.style.display = 'block';
+  });
+
+  document.addEventListener('click', e => {
+    if (!document.getElementById('wcSearch').contains(e.target)) {
+      document.getElementById('wcResults').style.display = 'none';
+    }
+  });
+
+  ['wcDate','wcTime','wcSource'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', wcRender);
+  });
+
+  // Auto-tick every second
+  function wcTick() { wcRender(); wcClockTimer = setTimeout(wcTick, 1000); }
+
+  // ─────────────────────────────────────────────
+  // POSTCODE
+  // ─────────────────────────────────────────────
+  function toggleRegion(r) {
+    const rows = document.querySelectorAll(`[data-region="${r}"]`);
+    const icon = document.getElementById(`icon-${r}`);
+    const hide = !rows[0]?.classList.contains('collapsed');
+    rows.forEach(row => row.classList.toggle('collapsed', hide));
+    if (icon) icon.textContent = hide ? '▶' : '▼';
+    localStorage.setItem('region-' + r, hide ? '1' : '0');
+  }
+
+  function filterEMEA(r) {
+    document.querySelectorAll('#emeaBody tr').forEach(tr => {
+      if (tr.hasAttribute('data-region-header')) {
+        tr.style.display = r === 'all' || tr.getAttribute('data-region-header') === r ? '' : 'none';
+      } else if (tr.hasAttribute('data-region')) {
+        tr.style.display = r === 'all' || tr.dataset.region === r ? '' : 'none';
+        tr.classList.remove('collapsed');
+      }
+    });
+  }
+
+  function filterCountry(v) {
+    const q = v.toLowerCase();
+    document.querySelectorAll('#emeaBody tr[data-region]').forEach(tr => {
+      tr.style.display = tr.cells[0].textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
+
+  function filterISO(v) {
+    const q = v.toLowerCase();
+    document.querySelectorAll('#emeaBody tr[data-region]').forEach(tr => {
+      tr.style.display = tr.cells[2].textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    populateCountries('ntCountry');
+    buildQuickGrid();
+    buildLinksBar();
+
+    // World clock init
+    document.getElementById('wcDate').valueAsDate = new Date();
+    wcUpdateSource();
+    wcTick();
+
+    // Restore collapsed regions
+    ['africa','me','eu'].forEach(r => {
+      if (localStorage.getItem('region-' + r) === '1') toggleRegion(r);
+    });
+
+    // Add first handover entry
+    addHoEntry();
+
+    // KB init
+    kbInit();
+  });
+
+  // ─────────────────────────────────────────────
+  // KB RESOURCE HUB
+  // ─────────────────────────────────────────────
+
+  // Storage keys
+  const KB_KEYS = {
+    links:  'kb_user_links',
+    cats:   'kb_custom_cats',
+    del:    'kb_deleted_links',
+    custom: 'kb_cat_customizations'
+  };
+
+  const KB_STORE = {
+    get: k => { try { return JSON.parse(localStorage.getItem(k)) ?? []; } catch { return []; } },
+    set: (k,v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { toast('Storage full','⚠️'); } },
+    links:  () => KB_STORE.get(KB_KEYS.links)  || [],
+    cats:   () => KB_STORE.get(KB_KEYS.cats)   || [],
+    del:    () => KB_STORE.get(KB_KEYS.del)    || [],
+    custom: () => KB_STORE.get(KB_KEYS.custom) || {}
+  };
+
+  // Default built-in categories
+  const KB_DEFAULT_CATS = [
+    { id:'labAccess',       name:'Lab & Access',               icon:'🔧', isDefault:true },
+    { id:'documentation',   name:'Documentation & Guides',     icon:'📚', isDefault:true },
+    { id:'security',        name:'Security & Authentication',  icon:'🔐', isDefault:true },
+    { id:'troubleshooting', name:'Troubleshooting & Logs',     icon:'🔍', isDefault:true },
+    { id:'features',        name:'Features & Configuration',   icon:'⚡', isDefault:true },
+    { id:'support',         name:'Support & Self-Service',     icon:'🆘', isDefault:true },
+  ];
+
+  // Default built-in links
+  const KB_DEFAULT_LINKS = [
+    { id:'dl_lab1',  cat:'labAccess',       icon:'🔬', title:'LAB Environment',                                       url:'https://10.24.31.25/#/settings/network/icm' },
+    { id:'dl_lab2',  cat:'labAccess',       icon:'🔗', title:'ServiceLink ESRS',                                      url:'https://servicelink.emc.com/drm/actions/service/index' },
+    { id:'dl_lab3',  cat:'labAccess',       icon:'🔑', title:'Root Access Portal',                                    url:'https://hubv1.corp.emc.com/services/service_key_generator' },
+    { id:'dl_lab4',  cat:'labAccess',       icon:'🛠️', title:'Gaining Root Access for Advanced Support',              url:'https://dellservices.lightning.force.com/lightning/r/Lightning_Knowledge__kav/ka02R000000i0AdQAI/view' },
+    { id:'dl_doc1',  cat:'documentation',   icon:'📖', title:'Reference & Knowledge Landing Page',                    url:'https://www.dell.com/support/kbdoc/en-us/000177659' },
+    { id:'dl_doc2',  cat:'documentation',   icon:'📋', title:'Host Configuration Guide',                              url:'https://www.dell.com/support/manuals/en-ca/powerstore-1000t/pwrstr-hcg/zoning-using-scsi-wwn' },
+    { id:'dl_doc3',  cat:'documentation',   icon:'📐', title:'Planning Guide',                                        url:'https://www.dell.com/support/manuals/en-ca/powerstore-5000/pwrstr-plang/network-ports-related-to-powerstore-x-model-appliances' },
+    { id:'dl_doc4',  cat:'documentation',   icon:'💻', title:'CLI User Guide',                                        url:'https://www.dell.com/support/manuals/en-ie/powerstore-5000t/pwrstr-cliug/-save_cred' },
+    { id:'dl_doc5',  cat:'documentation',   icon:'⚙️', title:'Service Scripts Guide',                                 url:'https://www.dell.com/support/manuals/en-us/powerstore-1000t/pwrstr-ssg/help-(svc_help)' },
+    { id:'dl_doc6',  cat:'documentation',   icon:'🎥', title:'Info Hub – Product Documentation & Videos',             url:'https://www.dell.com/support/kbdoc/en-us/000130110/powerstore-info-hub-product-documentation-videos' },
+    { id:'dl_doc7',  cat:'documentation',   icon:'🌐', title:'InfoHub Main Portal',                                   url:'https://infohub.delltechnologies.com/' },
+    { id:'dl_sec1',  cat:'security',        icon:'🔒', title:"D@RE Encryption Key Issue",                             url:'https://www.dell.com/support/kbdoc/en-uk/000191410' },
+    { id:'dl_sec2',  cat:'security',        icon:'🔐', title:'Reset Admin & Service Account Passwords',               url:'https://www.dell.com/support/manuals/en-us/powerstore/pwrstr-scg/reset-admin-and-service-account-passwords' },
+    { id:'dl_sec3',  cat:'security',        icon:'👥', title:'Configure LDAP Account',                                url:'https://www.dell.com/support/manuals/en-us/powerstore-9000/pwrstr-scg/configure-ldap-account' },
+    { id:'dl_sec4',  cat:'security',        icon:'🛡️', title:'Configure Secure LDAP',                                 url:'https://www.dell.com/support/manuals/en-us/powerstore-7000/pwrstr-scg/configure-secure-ldap' },
+    { id:'dl_trb1',  cat:'troubleshooting', icon:'📝', title:'Generate and Collect Various Logs',                     url:'https://www.dell.com/support/kbdoc/en-us/000133407' },
+    { id:'dl_trb2',  cat:'troubleshooting', icon:'📦', title:'Unpack Support Materials on STGToolset',                url:'https://powerstorewiki.apps.supportlabs.dell/How_to_unpack_support_materials_files_on_stgtoolset' },
+    { id:'dl_trb3',  cat:'troubleshooting', icon:'🔌', title:'Connect Remotely with SupportAssist',                   url:'https://www.dell.com/support/kbdoc/en-us/000129853' },
+    { id:'dl_trb4',  cat:'troubleshooting', icon:'🔄', title:'Reinitialize to Factory State',                         url:'https://www.dell.com/support/kbdoc/en-us/000180964' },
+    { id:'dl_trb5',  cat:'troubleshooting', icon:'📊', title:'Review FE FC Ports Stats and Health',                   url:'https://www.dell.com/support/kbdoc/en-us/000195389' },
+    { id:'dl_trb6',  cat:'troubleshooting', icon:'⚡', title:'CPU Utilization Too High – Pre-Upgrade Check',          url:'https://www.dell.com/support/kbdoc/en-us/000192018' },
+    { id:'dl_trb7',  cat:'troubleshooting', icon:'🔧', title:'Loss of Cluster Management After Data Path Transition',  url:'https://dellservices.lightning.force.com/lightning/r/Lightning_Knowledge__kav/ka06P000000Xff1QAC/view' },
+    { id:'dl_feat1', cat:'features',        icon:'🏙️', title:'Metro Volume',                                          url:'https://infohub.delltechnologies.com/l/dell-powerstore-metro-volume/failure-scenarios-6' },
+    { id:'dl_feat2', cat:'features',        icon:'💾', title:'Data Reduction',                                        url:'https://www.dell.com/support/kbdoc/en-us/000190303' },
+    { id:'dl_sup1',  cat:'support',         icon:'❓', title:'Self Service Procedures – Solve',                       url:'https://solve.dell.com/solve/home' },
+    { id:'dl_sup2',  cat:'support',         icon:'💿', title:'Fix Drive Access Denied Issues',                        url:'https://www.wintips.org/fix-drive-access-denied-drive-is-not-accessible/' },
+  ];
+
+  let kbCurrentFilter = 'all';
+  let kbCurrentSearch = '';
+
+  function kbAllCats() {
+    const custom = KB_STORE.custom();
+    return [
+      ...KB_DEFAULT_CATS.map(c => ({
+        ...c,
+        name: custom[c.id]?.name || c.name,
+        icon: custom[c.id]?.icon || c.icon,
+      })),
+      ...KB_STORE.cats()
+    ];
+  }
+
+  function kbDomainOf(url) {
+    try { return new URL(url).hostname.replace('www.',''); } catch { return url.replace(/^https?:\/\/(www\.)?/,'').split('/')[0]; }
+  }
+
+  function kbSanitize(s) {
+    const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+  }
+
+  // Build or rebuild all KB sections from scratch
+  function kbRender() {
+    const sc  = document.getElementById('kbSectionsContainer');
+    const usc = document.getElementById('kbUserSectionsContainer');
+    sc.innerHTML = ''; usc.innerHTML = '';
+
+    const deleted = KB_STORE.del();
+    const userLinks = KB_STORE.links();
+    const allCats = kbAllCats();
+
+    allCats.forEach(cat => {
+      // Collect default links for this category (not deleted)
+      const dLinks = KB_DEFAULT_LINKS.filter(l => l.cat === cat.id && !deleted.includes(l.id));
+      // Collect user links for this category
+      const uLinks = userLinks.filter(l => l.cat === cat.id);
+      const all = [...dLinks, ...uLinks];
+      if (!all.length && !cat.isDefault) return; // hide empty custom cats
+
+      const sec = kbMakeSection(cat, all);
+      if (cat.isDefault) sc.appendChild(sec);
+      else usc.appendChild(sec);
+    });
+
+    kbUpdateStats();
+    kbApplyFilter(kbCurrentFilter);
+    kbApplySearch(kbCurrentSearch);
+    kbRebuildFilterChips();
+  }
+
+  function kbMakeSection(cat, links) {
+    const sec = document.createElement('section');
+    sec.className = 'kb-section';
+    sec.id = 'kb-cat-' + cat.id;
+    sec.dataset.cat = cat.id;
+
+    const head = document.createElement('div');
+    head.className = 'kb-section-head';
+    head.innerHTML = `
+      <span class="kb-section-icon">${cat.icon}</span>
+      <h3>${kbSanitize(cat.name)}</h3>
+      <div class="kb-section-divider"></div>
+      <span class="kb-section-count" id="kbcnt-${cat.id}">${links.length} link${links.length !== 1 ? 's' : ''}</span>
+    `;
+    sec.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'kb-grid';
+    grid.id = 'kbgrid-' + cat.id;
+    links.forEach(l => grid.appendChild(kbMakeCard(l, !l.id.startsWith('dl_'))));
+    sec.appendChild(grid);
+
+    return sec;
+  }
+
+  function kbMakeCard(link, isUser) {
+    const a = document.createElement('a');
+    a.href   = link.url;
+    a.target = '_blank';
+    a.rel    = 'noopener';
+    a.className = 'kb-link-card';
+    a.dataset.linkId  = link.id;
+    a.dataset.cat     = link.cat || link.category || '';
+    a.dataset.title   = (link.title || '').toLowerCase();
+    a.dataset.url     = kbDomainOf(link.url);
+    a.setAttribute('aria-label', link.title);
+
+    a.innerHTML = `
+      <div class="kb-card-icon">${link.icon || '🔗'}</div>
+      <div class="kb-card-body">
+        <div class="kb-card-title">${kbSanitize(link.title)}</div>
+        <div class="kb-card-url">${kbDomainOf(link.url)}</div>
+      </div>
+      <span class="kb-card-arrow">↗</span>
+      <button class="kb-card-del" aria-label="Delete ${kbSanitize(link.title)}" tabindex="-1">✕</button>
+    `;
+
+    a.querySelector('.kb-card-del').addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      kbDeleteLink(link.id, isUser);
+    });
+
+    return a;
+  }
+
+  function kbDeleteLink(id, isUser) {
+    if (!confirm('Delete this link?')) return;
+    if (isUser) {
+      KB_STORE.set(KB_KEYS.links, KB_STORE.links().filter(l => l.id !== id));
+    } else {
+      const d = KB_STORE.del();
+      if (!d.includes(id)) { d.push(id); KB_STORE.set(KB_KEYS.del, d); }
+    }
+    document.querySelector(`.kb-link-card[data-link-id="${id}"]`)?.remove();
+    kbUpdateStats();
+    kbApplySearch(kbCurrentSearch);
+    toast('Link deleted');
+  }
+
+  function kbUpdateStats() {
+    const allCards = document.querySelectorAll('.kb-link-card');
+    const userLinks = KB_STORE.links();
+    document.getElementById('kbStatTotal').textContent  = allCards.length;
+    document.getElementById('kbStatCats').textContent   = kbAllCats().length;
+    document.getElementById('kbStatCustom').textContent = userLinks.length;
+    document.getElementById('kbStatDate').textContent   = new Date().toLocaleDateString('en-IE',{day:'numeric',month:'short'});
+
+    // Update section counts
+    document.querySelectorAll('.kb-section').forEach(sec => {
+      const catId = sec.dataset.cat;
+      const ct = document.getElementById('kbcnt-' + catId);
+      if (ct) {
+        const n = sec.querySelectorAll('.kb-link-card:not(.kb-hidden)').length;
+        ct.textContent = `${n} link${n !== 1 ? 's' : ''}`;
+      }
+    });
+  }
+
+  // ─── FILTER ───
+  function kbFilter(btn, cat) {
+    kbCurrentFilter = cat;
+    document.querySelectorAll('.kb-filter-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    kbApplyFilter(cat);
+    kbApplySearch(kbCurrentSearch);
+  }
+
+  function kbApplyFilter(cat) {
+    document.querySelectorAll('.kb-section').forEach(sec => {
+      const match = cat === 'all' || sec.dataset.cat === cat;
+      sec.style.display = match ? '' : 'none';
+    });
+  }
+
+  // ─── SEARCH ───
+  const kbSearchEl = document.getElementById('kbSearchInput');
+  const kbClearEl  = document.getElementById('kbSearchClear');
+
+  kbSearchEl.addEventListener('input', () => {
+    kbCurrentSearch = kbSearchEl.value.toLowerCase().trim();
+    kbClearEl.classList.toggle('visible', !!kbCurrentSearch);
+    kbApplySearch(kbCurrentSearch);
+  });
+
+  function kbClearSearch() {
+    kbSearchEl.value = '';
+    kbCurrentSearch = '';
+    kbClearEl.classList.remove('visible');
+    kbApplySearch('');
+  }
+
+  function kbApplySearch(q) {
+    let visible = 0;
+    document.querySelectorAll('.kb-link-card').forEach(card => {
+      const inCat = kbCurrentFilter === 'all' || card.dataset.cat === kbCurrentFilter;
+      const inSearch = !q || card.dataset.title.includes(q) || card.dataset.url.includes(q);
+      const show = inCat && inSearch;
+      card.classList.toggle('kb-hidden', !show);
+      if (show) visible++;
+    });
+    document.getElementById('kbNoResults').classList.toggle('show', visible === 0);
+    kbUpdateStats();
+  }
+
+  // Cmd+K focuses KB search when on KB page
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      const kbPage = document.getElementById('page-kb');
+      if (kbPage && kbPage.classList.contains('active')) {
+        e.preventDefault();
+        kbSearchEl.focus(); kbSearchEl.select();
+      }
+    }
+  });
+
+  // ─── CATEGORY FILTER CHIPS: rebuild to include custom cats ───
+  function kbRebuildFilterChips() {
+    const container = document.getElementById('kbFilterChips');
+    if (!container) return;
+    container.innerHTML = '';
+    const cats = kbAllCats();
+    const allBtn = document.createElement('button');
+    allBtn.className = 'kb-filter-chip' + (kbCurrentFilter === 'all' ? ' active' : '');
+    allBtn.dataset.filter = 'all';
+    allBtn.textContent = 'All';
+    allBtn.onclick = () => kbFilter(allBtn, 'all');
+    container.appendChild(allBtn);
+    cats.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'kb-filter-chip' + (kbCurrentFilter === cat.id ? ' active' : '');
+      btn.dataset.filter = cat.id;
+      btn.innerHTML = `${cat.icon} ${kbSanitize(cat.name)}`;
+      btn.onclick = () => kbFilter(btn, cat.id);
+      container.appendChild(btn);
+    });
+  }
+
+  // ─── ADD LINK MODAL ───
+  function kbOpenAdd() {
+    kbPopulateCatDropdown();
+    kbOpenModal('kbAddModal');
+  }
+
+  function kbPopulateCatDropdown() {
+    const sel = document.getElementById('kbNewCat');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Select…</option>';
+    kbAllCats().forEach(cat => {
+      const o = new Option(`${cat.icon} ${cat.name}`, cat.id);
+      sel.appendChild(o);
+    });
+    if (cur) sel.value = cur;
+  }
+
+  function kbSubmitAdd() {
+    const title = document.getElementById('kbNewTitle').value.trim();
+    const rawUrl = document.getElementById('kbNewUrl').value.trim();
+    const cat   = document.getElementById('kbNewCat').value;
+    const icon  = document.getElementById('kbNewIcon').value.trim();
+
+    let valid = true;
+    const te = document.getElementById('kbNewTitleErr');
+    const ue = document.getElementById('kbNewUrlErr');
+    const ce = document.getElementById('kbNewCatErr');
+
+    te.style.display = !title ? 'block' : 'none'; if (!title) valid = false;
+    const urlOk = rawUrl && /^https?:\/\//.test(rawUrl);
+    ue.style.display = !urlOk ? 'block' : 'none'; if (!urlOk) valid = false;
+    ce.style.display = !cat ? 'block' : 'none'; if (!cat) valid = false;
+    if (!valid) return;
+
+    const link = {
+      id: 'u_' + Date.now(),
+      title: kbSanitize(title),
+      url: rawUrl,
+      cat,
+      icon: kbSanitize(icon) || '🔗'
+    };
+
+    const links = KB_STORE.links();
+    links.push(link);
+    KB_STORE.set(KB_KEYS.links, links);
+
+    // Add card to existing grid or create section
+    let grid = document.getElementById('kbgrid-' + cat);
+    if (!grid) {
+      const catObj = kbAllCats().find(c => c.id === cat);
+      if (catObj) {
+        const sec = kbMakeSection(catObj, [link]);
+        document.getElementById('kbUserSectionsContainer').appendChild(sec);
+        grid = null; // section already has card
+      }
+    } else {
+      grid.appendChild(kbMakeCard(link, true));
+    }
+
+    ['kbNewTitle','kbNewUrl','kbNewIcon'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('kbNewCat').value = '';
+    ['kbNewTitleErr','kbNewUrlErr','kbNewCatErr'].forEach(id => document.getElementById(id).style.display = 'none');
+
+    kbCloseModal('kbAddModal');
+    kbUpdateStats();
+    kbRebuildFilterChips();
+    toast('KB link added!');
+  }
+
+  // ─── MANAGE CATEGORIES ───
+  function kbOpenManage() {
+    kbRenderCatList();
+    kbOpenModal('kbManageModal');
+  }
+
+  function kbRenderCatList() {
+    const list = document.getElementById('kbCatList');
+    list.innerHTML = '';
+    kbAllCats().forEach(cat => {
+      const div = document.createElement('div');
+      div.className = 'kb-cat-item ' + (cat.isDefault ? 'is-default' : 'is-custom');
+      div.innerHTML = `
+        <span style="font-size:17px">${cat.icon}</span>
+        <span class="kb-cat-name">${kbSanitize(cat.name)}</span>
+        <div class="kb-cat-actions">
+          <button class="kb-cat-btn" title="Edit" aria-label="Edit ${kbSanitize(cat.name)}">✏️</button>
+          <button class="kb-cat-btn danger" title="Delete" aria-label="Delete ${kbSanitize(cat.name)}" ${cat.isDefault ? 'disabled' : ''}>🗑️</button>
+        </div>
+      `;
+      const [editBtn, delBtn] = div.querySelectorAll('.kb-cat-btn');
+      editBtn.addEventListener('click', () => kbEditCategory(cat));
+      if (!cat.isDefault) delBtn.addEventListener('click', () => kbDeleteCategory(cat.id));
+      list.appendChild(div);
+    });
+  }
+
+  function kbAddCategory() {
+    const name = document.getElementById('kbNewCatName').value.trim();
+    const icon = document.getElementById('kbNewCatIcon').value.trim();
+    if (!name) { toast('Category name required','⚠️'); return; }
+
+    const newCat = { id:'cat_'+Date.now(), name:kbSanitize(name), icon:kbSanitize(icon)||'📁', isDefault:false };
+    const cats = KB_STORE.cats(); cats.push(newCat); KB_STORE.set(KB_KEYS.cats, cats);
+
+    const sec = kbMakeSection(newCat, []);
+    document.getElementById('kbUserSectionsContainer').appendChild(sec);
+
+    document.getElementById('kbNewCatName').value = '';
+    document.getElementById('kbNewCatIcon').value = '';
+    kbRenderCatList();
+    kbUpdateStats();
+    kbPopulateCatDropdown();
+    kbRebuildFilterChips();
+    toast('Category added!');
+  }
+
+  function kbEditCategory(cat) {
+    const newName = prompt('Category name:', cat.name);
+    if (!newName?.trim()) return;
+    const newIcon = prompt('Icon (emoji):', cat.icon) || cat.icon;
+
+    if (cat.isDefault) {
+      const c = KB_STORE.custom();
+      c[cat.id] = { name: kbSanitize(newName.trim()), icon: kbSanitize(newIcon) };
+      KB_STORE.set(KB_KEYS.custom, c);
+    } else {
+      const cats = KB_STORE.cats();
+      const idx = cats.findIndex(c => c.id === cat.id);
+      if (idx > -1) { cats[idx].name = kbSanitize(newName.trim()); cats[idx].icon = kbSanitize(newIcon); KB_STORE.set(KB_KEYS.cats, cats); }
+    }
+
+    kbRender();
+    kbRenderCatList();
+    toast('Category updated!');
+  }
+
+  function kbDeleteCategory(id) {
+    const uLinks = KB_STORE.links().filter(l => l.cat === id);
+    if (!confirm(`Delete this category?${uLinks.length ? `\n\nThis will also delete ${uLinks.length} custom link(s).` : ''}`)) return;
+    KB_STORE.set(KB_KEYS.cats, KB_STORE.cats().filter(c => c.id !== id));
+    KB_STORE.set(KB_KEYS.links, KB_STORE.links().filter(l => l.cat !== id));
+    document.getElementById('kb-cat-' + id)?.remove();
+    kbRenderCatList();
+    kbUpdateStats();
+    kbRebuildFilterChips();
+    toast('Category deleted');
+  }
+
+  // ─── EXPORT / IMPORT ───
+  function kbExport() {
+    const data = {
+      userLinks: KB_STORE.links(),
+      customCats: KB_STORE.cats(),
+      deletedLinks: KB_STORE.del(),
+      catCustomizations: KB_STORE.custom()
+    };
+    const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'kb-backup.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('KB data exported!');
+  }
+
+  function kbImport(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data || typeof data !== 'object') throw new Error();
+        if (Array.isArray(data.userLinks)) {
+          const ex = new Set(KB_STORE.links().map(l=>l.id));
+          KB_STORE.set(KB_KEYS.links, [...KB_STORE.links(), ...data.userLinks.filter(l=>!ex.has(l.id))]);
+        }
+        if (Array.isArray(data.customCats)) {
+          const ex = new Set(KB_STORE.cats().map(c=>c.id));
+          KB_STORE.set(KB_KEYS.cats, [...KB_STORE.cats(), ...data.customCats.filter(c=>!ex.has(c.id))]);
+        }
+        if (Array.isArray(data.deletedLinks)) KB_STORE.set(KB_KEYS.del, [...new Set([...KB_STORE.del(),...data.deletedLinks])]);
+        if (data.catCustomizations) KB_STORE.set(KB_KEYS.custom, {...KB_STORE.custom(),...data.catCustomizations});
+        toast('Import successful — reloading…');
+        setTimeout(() => location.reload(), 1200);
+      } catch { toast('Invalid backup file','⚠️'); }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  // ─── MODAL HELPERS ───
+  function kbOpenModal(id) {
+    const m = document.getElementById(id);
+    m.classList.add('open');
+    setTimeout(() => m.querySelector('input,select,button:not(.kb-modal-close)')?.focus(), 60);
+  }
+  function kbCloseModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+  ['kbAddModal','kbManageModal'].forEach(id => {
+    document.getElementById(id).addEventListener('click', e => {
+      if (e.target === e.currentTarget) kbCloseModal(id);
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { kbCloseModal('kbAddModal'); kbCloseModal('kbManageModal'); }
+  });
+
+  // ─── INIT ───
+  function kbInit() {
+    kbRender();
+    document.getElementById('kbStatDate').textContent = new Date().toLocaleDateString('en-IE',{day:'numeric',month:'short'});
+  }
+
+  </script>
+</body>
+</html>
